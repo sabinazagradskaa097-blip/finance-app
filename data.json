@@ -5,6 +5,31 @@
     "monthlyBudget": 140000,
     "month": "2026-09"
   },
+  "goal": {
+    "name": "Подушка на уход из найма",
+    "target": 780000,
+    "saved": 210000
+  },
+  "accounts": [
+    {
+      "id": "a1",
+      "name": "Тинькофф",
+      "balance": 84200,
+      "currency": "₽"
+    },
+    {
+      "id": "a2",
+      "name": "Наличные",
+      "balance": 12300,
+      "currency": "₽"
+    },
+    {
+      "id": "a3",
+      "name": "Накопительный",
+      "balance": 210000,
+      "currency": "₽"
+    }
+  ],
   "categories": {
     "expense": [
       {
@@ -46,28 +71,32 @@
     ],
     "income": [
       {
+        "id": "salary",
+        "name": "Зарплата",
+        "icon": "doc",
+        "tint": "#6FB3FF",
+        "source": "job"
+      },
+      {
         "id": "client",
         "name": "Клиент",
         "icon": "briefcase",
-        "tint": "#4FD8C4"
+        "tint": "#4FD8C4",
+        "source": "business"
       },
       {
         "id": "consult",
         "name": "Консультация",
         "icon": "crystal",
-        "tint": "#D07BFF"
-      },
-      {
-        "id": "refund",
-        "name": "Возврат",
-        "icon": "refund",
-        "tint": "#6FC9FF"
+        "tint": "#D07BFF",
+        "source": "business"
       },
       {
         "id": "other_in",
         "name": "Другое",
         "icon": "sparkle",
-        "tint": "#B9A6FF"
+        "tint": "#B9A6FF",
+        "source": "business"
       }
     ]
   },
@@ -99,72 +128,6 @@
       "amount": 900,
       "type": "expense",
       "categoryId": "cafe"
-    }
-  ],
-  "transactions": [
-    {
-      "id": "t1",
-      "type": "income",
-      "amount": 65000,
-      "categoryId": "client",
-      "date": "2026-09-07",
-      "comment": "Сайт-визитка, вторая часть"
-    },
-    {
-      "id": "t2",
-      "type": "expense",
-      "amount": 4380,
-      "categoryId": "food",
-      "date": "2026-09-07",
-      "comment": "Вкусвилл"
-    },
-    {
-      "id": "t3",
-      "type": "expense",
-      "amount": 690,
-      "categoryId": "cafe",
-      "date": "2026-09-06",
-      "comment": "Кофе с Мариной"
-    },
-    {
-      "id": "t4",
-      "type": "expense",
-      "amount": 1240,
-      "categoryId": "transport",
-      "date": "2026-09-05",
-      "comment": "Такси до студии"
-    },
-    {
-      "id": "t5",
-      "type": "income",
-      "amount": 12000,
-      "categoryId": "consult",
-      "date": "2026-09-04",
-      "comment": "Разбор натальной карты"
-    },
-    {
-      "id": "t6",
-      "type": "expense",
-      "amount": 2790,
-      "categoryId": "services",
-      "date": "2026-09-04",
-      "comment": "Claude Pro"
-    },
-    {
-      "id": "t7",
-      "type": "expense",
-      "amount": 18500,
-      "categoryId": "home",
-      "date": "2026-09-03",
-      "comment": "Аренда, часть"
-    },
-    {
-      "id": "t8",
-      "type": "expense",
-      "amount": 3120,
-      "categoryId": "food",
-      "date": "2026-09-03",
-      "comment": "Продукты на неделю"
     }
   ],
   "subscriptions": [
@@ -207,6 +170,612 @@
       "nextPaymentDate": "2026-09-30",
       "icon": "cloud",
       "tint": "#FFB067"
+    }
+  ],
+  "insights": [
+    "Своё дело растёт: в этом месяце Sabina Digital уже приносит заметную долю дохода.",
+    "На кафе тратишь аккуратно — меньше, чем уходит на подписки. Мелкие траты под контролем."
+  ],
+  "transactions": [
+    {
+      "id": "t1",
+      "type": "income",
+      "amount": 113000,
+      "categoryId": "salary",
+      "date": "2026-06-05",
+      "comment": "Зарплата"
+    },
+    {
+      "id": "t2",
+      "type": "income",
+      "amount": 48000,
+      "categoryId": "client",
+      "date": "2026-06-08",
+      "comment": "Проект-сайт"
+    },
+    {
+      "id": "t3",
+      "type": "expense",
+      "amount": 34000,
+      "categoryId": "home",
+      "date": "2026-06-03",
+      "comment": "Аренда"
+    },
+    {
+      "id": "t4",
+      "type": "expense",
+      "amount": 2371,
+      "categoryId": "food",
+      "date": "2026-06-24",
+      "comment": "Вкусвилл"
+    },
+    {
+      "id": "t5",
+      "type": "expense",
+      "amount": 4571,
+      "categoryId": "food",
+      "date": "2026-06-24",
+      "comment": "Вкусвилл"
+    },
+    {
+      "id": "t6",
+      "type": "expense",
+      "amount": 4218,
+      "categoryId": "food",
+      "date": "2026-06-14",
+      "comment": "Вкусвилл"
+    },
+    {
+      "id": "t7",
+      "type": "expense",
+      "amount": 1922,
+      "categoryId": "food",
+      "date": "2026-06-03",
+      "comment": "Пятёрочка"
+    },
+    {
+      "id": "t8",
+      "type": "expense",
+      "amount": 817,
+      "categoryId": "cafe",
+      "date": "2026-06-20",
+      "comment": "Кофе"
+    },
+    {
+      "id": "t9",
+      "type": "expense",
+      "amount": 874,
+      "categoryId": "cafe",
+      "date": "2026-06-07",
+      "comment": "Завтрак"
+    },
+    {
+      "id": "t10",
+      "type": "expense",
+      "amount": 525,
+      "categoryId": "cafe",
+      "date": "2026-06-15",
+      "comment": "Кофе с подругой"
+    },
+    {
+      "id": "t11",
+      "type": "expense",
+      "amount": 1128,
+      "categoryId": "cafe",
+      "date": "2026-06-28",
+      "comment": "Кофе"
+    },
+    {
+      "id": "t12",
+      "type": "expense",
+      "amount": 1077,
+      "categoryId": "cafe",
+      "date": "2026-06-26",
+      "comment": "Обед"
+    },
+    {
+      "id": "t13",
+      "type": "expense",
+      "amount": 996,
+      "categoryId": "transport",
+      "date": "2026-06-09",
+      "comment": "Такси"
+    },
+    {
+      "id": "t14",
+      "type": "expense",
+      "amount": 740,
+      "categoryId": "transport",
+      "date": "2026-06-25",
+      "comment": "Метро"
+    },
+    {
+      "id": "t15",
+      "type": "expense",
+      "amount": 509,
+      "categoryId": "transport",
+      "date": "2026-06-03",
+      "comment": "Метро"
+    },
+    {
+      "id": "t16",
+      "type": "expense",
+      "amount": 498,
+      "categoryId": "transport",
+      "date": "2026-06-12",
+      "comment": "Метро"
+    },
+    {
+      "id": "t17",
+      "type": "expense",
+      "amount": 1536,
+      "categoryId": "transport",
+      "date": "2026-06-09",
+      "comment": "Такси"
+    },
+    {
+      "id": "t18",
+      "type": "expense",
+      "amount": 1240,
+      "categoryId": "transport",
+      "date": "2026-06-18",
+      "comment": "Такси"
+    },
+    {
+      "id": "t19",
+      "type": "expense",
+      "amount": 2790,
+      "categoryId": "services",
+      "date": "2026-06-18",
+      "comment": "Сервер"
+    },
+    {
+      "id": "t20",
+      "type": "expense",
+      "amount": 1200,
+      "categoryId": "services",
+      "date": "2026-06-29",
+      "comment": "Сервер"
+    },
+    {
+      "id": "t21",
+      "type": "expense",
+      "amount": 1487,
+      "categoryId": "other",
+      "date": "2026-06-23",
+      "comment": "Косметика"
+    },
+    {
+      "id": "t22",
+      "type": "expense",
+      "amount": 887,
+      "categoryId": "other",
+      "date": "2026-06-22",
+      "comment": "Подарок"
+    },
+    {
+      "id": "t23",
+      "type": "expense",
+      "amount": 3866,
+      "categoryId": "other",
+      "date": "2026-06-10",
+      "comment": "Косметика"
+    },
+    {
+      "id": "t24",
+      "type": "income",
+      "amount": 113000,
+      "categoryId": "salary",
+      "date": "2026-07-05",
+      "comment": "Зарплата"
+    },
+    {
+      "id": "t25",
+      "type": "income",
+      "amount": 62000,
+      "categoryId": "client",
+      "date": "2026-07-09",
+      "comment": "Проект-сайт"
+    },
+    {
+      "id": "t26",
+      "type": "income",
+      "amount": 12000,
+      "categoryId": "consult",
+      "date": "2026-07-23",
+      "comment": "Консультация"
+    },
+    {
+      "id": "t27",
+      "type": "expense",
+      "amount": 34000,
+      "categoryId": "home",
+      "date": "2026-07-03",
+      "comment": "Аренда"
+    },
+    {
+      "id": "t28",
+      "type": "expense",
+      "amount": 3255,
+      "categoryId": "food",
+      "date": "2026-07-07",
+      "comment": "Продукты"
+    },
+    {
+      "id": "t29",
+      "type": "expense",
+      "amount": 4674,
+      "categoryId": "food",
+      "date": "2026-07-30",
+      "comment": "Вкусвилл"
+    },
+    {
+      "id": "t30",
+      "type": "expense",
+      "amount": 4295,
+      "categoryId": "food",
+      "date": "2026-07-21",
+      "comment": "Пятёрочка"
+    },
+    {
+      "id": "t31",
+      "type": "expense",
+      "amount": 3987,
+      "categoryId": "food",
+      "date": "2026-07-24",
+      "comment": "Пятёрочка"
+    },
+    {
+      "id": "t32",
+      "type": "expense",
+      "amount": 2469,
+      "categoryId": "food",
+      "date": "2026-07-15",
+      "comment": "Магнит"
+    },
+    {
+      "id": "t33",
+      "type": "expense",
+      "amount": 1247,
+      "categoryId": "cafe",
+      "date": "2026-07-21",
+      "comment": "Обед"
+    },
+    {
+      "id": "t34",
+      "type": "expense",
+      "amount": 1001,
+      "categoryId": "cafe",
+      "date": "2026-07-11",
+      "comment": "Кофе"
+    },
+    {
+      "id": "t35",
+      "type": "expense",
+      "amount": 534,
+      "categoryId": "cafe",
+      "date": "2026-07-27",
+      "comment": "Кофе"
+    },
+    {
+      "id": "t36",
+      "type": "expense",
+      "amount": 1124,
+      "categoryId": "cafe",
+      "date": "2026-07-11",
+      "comment": "Завтрак"
+    },
+    {
+      "id": "t37",
+      "type": "expense",
+      "amount": 574,
+      "categoryId": "cafe",
+      "date": "2026-07-03",
+      "comment": "Обед"
+    },
+    {
+      "id": "t38",
+      "type": "expense",
+      "amount": 1235,
+      "categoryId": "cafe",
+      "date": "2026-07-31",
+      "comment": "Кофе с подругой"
+    },
+    {
+      "id": "t39",
+      "type": "expense",
+      "amount": 1322,
+      "categoryId": "transport",
+      "date": "2026-07-13",
+      "comment": "Каршеринг"
+    },
+    {
+      "id": "t40",
+      "type": "expense",
+      "amount": 1239,
+      "categoryId": "transport",
+      "date": "2026-07-05",
+      "comment": "Метро"
+    },
+    {
+      "id": "t41",
+      "type": "expense",
+      "amount": 585,
+      "categoryId": "transport",
+      "date": "2026-07-08",
+      "comment": "Каршеринг"
+    },
+    {
+      "id": "t42",
+      "type": "expense",
+      "amount": 1449,
+      "categoryId": "transport",
+      "date": "2026-07-18",
+      "comment": "Метро"
+    },
+    {
+      "id": "t43",
+      "type": "expense",
+      "amount": 1200,
+      "categoryId": "services",
+      "date": "2026-07-14",
+      "comment": "Подписка"
+    },
+    {
+      "id": "t44",
+      "type": "expense",
+      "amount": 650,
+      "categoryId": "services",
+      "date": "2026-07-12",
+      "comment": "Claude Pro"
+    },
+    {
+      "id": "t45",
+      "type": "expense",
+      "amount": 1450,
+      "categoryId": "services",
+      "date": "2026-07-17",
+      "comment": "Сервер"
+    },
+    {
+      "id": "t46",
+      "type": "expense",
+      "amount": 3795,
+      "categoryId": "other",
+      "date": "2026-07-02",
+      "comment": "Косметика"
+    },
+    {
+      "id": "t47",
+      "type": "income",
+      "amount": 113000,
+      "categoryId": "salary",
+      "date": "2026-08-05",
+      "comment": "Зарплата"
+    },
+    {
+      "id": "t48",
+      "type": "income",
+      "amount": 62000,
+      "categoryId": "client",
+      "date": "2026-08-10",
+      "comment": "Проект-сайт"
+    },
+    {
+      "id": "t49",
+      "type": "expense",
+      "amount": 35000,
+      "categoryId": "home",
+      "date": "2026-08-03",
+      "comment": "Аренда"
+    },
+    {
+      "id": "t50",
+      "type": "expense",
+      "amount": 3376,
+      "categoryId": "food",
+      "date": "2026-08-13",
+      "comment": "Магнит"
+    },
+    {
+      "id": "t51",
+      "type": "expense",
+      "amount": 3967,
+      "categoryId": "food",
+      "date": "2026-08-09",
+      "comment": "Вкусвилл"
+    },
+    {
+      "id": "t52",
+      "type": "expense",
+      "amount": 4586,
+      "categoryId": "food",
+      "date": "2026-08-24",
+      "comment": "Вкусвилл"
+    },
+    {
+      "id": "t53",
+      "type": "expense",
+      "amount": 4592,
+      "categoryId": "food",
+      "date": "2026-08-29",
+      "comment": "Продукты"
+    },
+    {
+      "id": "t54",
+      "type": "expense",
+      "amount": 414,
+      "categoryId": "cafe",
+      "date": "2026-08-10",
+      "comment": "Завтрак"
+    },
+    {
+      "id": "t55",
+      "type": "expense",
+      "amount": 461,
+      "categoryId": "cafe",
+      "date": "2026-08-15",
+      "comment": "Кофе"
+    },
+    {
+      "id": "t56",
+      "type": "expense",
+      "amount": 1276,
+      "categoryId": "cafe",
+      "date": "2026-08-24",
+      "comment": "Кофе с подругой"
+    },
+    {
+      "id": "t57",
+      "type": "expense",
+      "amount": 1295,
+      "categoryId": "cafe",
+      "date": "2026-08-17",
+      "comment": "Обед"
+    },
+    {
+      "id": "t58",
+      "type": "expense",
+      "amount": 819,
+      "categoryId": "cafe",
+      "date": "2026-08-30",
+      "comment": "Кофе"
+    },
+    {
+      "id": "t59",
+      "type": "expense",
+      "amount": 1191,
+      "categoryId": "cafe",
+      "date": "2026-08-21",
+      "comment": "Кофе с подругой"
+    },
+    {
+      "id": "t60",
+      "type": "expense",
+      "amount": 613,
+      "categoryId": "transport",
+      "date": "2026-08-12",
+      "comment": "Такси"
+    },
+    {
+      "id": "t61",
+      "type": "expense",
+      "amount": 1404,
+      "categoryId": "transport",
+      "date": "2026-08-31",
+      "comment": "Каршеринг"
+    },
+    {
+      "id": "t62",
+      "type": "expense",
+      "amount": 301,
+      "categoryId": "transport",
+      "date": "2026-08-20",
+      "comment": "Метро"
+    },
+    {
+      "id": "t63",
+      "type": "expense",
+      "amount": 1300,
+      "categoryId": "transport",
+      "date": "2026-08-01",
+      "comment": "Такси"
+    },
+    {
+      "id": "t64",
+      "type": "expense",
+      "amount": 800,
+      "categoryId": "services",
+      "date": "2026-08-08",
+      "comment": "Claude Pro"
+    },
+    {
+      "id": "t65",
+      "type": "expense",
+      "amount": 1450,
+      "categoryId": "services",
+      "date": "2026-08-29",
+      "comment": "Подписка"
+    },
+    {
+      "id": "t66",
+      "type": "expense",
+      "amount": 1050,
+      "categoryId": "other",
+      "date": "2026-08-24",
+      "comment": "Аптека"
+    },
+    {
+      "id": "t67",
+      "type": "income",
+      "amount": 113000,
+      "categoryId": "salary",
+      "date": "2026-09-05",
+      "comment": "Зарплата"
+    },
+    {
+      "id": "t68",
+      "type": "income",
+      "amount": 65000,
+      "categoryId": "client",
+      "date": "2026-09-07",
+      "comment": "Сайт-визитка, вторая часть"
+    },
+    {
+      "id": "t69",
+      "type": "expense",
+      "amount": 18500,
+      "categoryId": "home",
+      "date": "2026-09-03",
+      "comment": "Аренда, часть"
+    },
+    {
+      "id": "t70",
+      "type": "expense",
+      "amount": 3120,
+      "categoryId": "food",
+      "date": "2026-09-03",
+      "comment": "Продукты на неделю"
+    },
+    {
+      "id": "t71",
+      "type": "expense",
+      "amount": 4380,
+      "categoryId": "food",
+      "date": "2026-09-07",
+      "comment": "Вкусвилл"
+    },
+    {
+      "id": "t72",
+      "type": "expense",
+      "amount": 1240,
+      "categoryId": "transport",
+      "date": "2026-09-05",
+      "comment": "Такси до студии"
+    },
+    {
+      "id": "t73",
+      "type": "expense",
+      "amount": 690,
+      "categoryId": "cafe",
+      "date": "2026-09-06",
+      "comment": "Кофе с Мариной"
+    },
+    {
+      "id": "t74",
+      "type": "expense",
+      "amount": 2790,
+      "categoryId": "services",
+      "date": "2026-09-04",
+      "comment": "Claude Pro"
+    },
+    {
+      "id": "t75",
+      "type": "expense",
+      "amount": 350,
+      "categoryId": "cafe",
+      "date": "2026-09-02",
+      "comment": "Кофе"
     }
   ]
 }
