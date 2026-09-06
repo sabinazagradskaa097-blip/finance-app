@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Мои финансы</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{
+  --text:#F3EDFF;
+  --muted:#B0A2D4;
+  --dim:#8E80B4;
+  --violet:#A97BFF;
+  --violet-lt:#D3BAFF;
+  --violet-dk:#6B3FD4;
+  --pink:#F07AD8;
+  --blue:#7FC4FF;
+  --mint:#5FE8CE;
+  --up:#5FE0B0;
+  --down:#FF8FB6;
+
+  /* ---- тёмное стекло ---- */
+  --gl-fill:linear-gradient(158deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.035) 44%,rgba(190,150,255,.09) 100%);
+  --gl-blur:blur(18px) saturate(150%);
+  --gl-rim:linear-gradient(162deg,
+      rgba(255,255,255,.98) 0%,
+      rgba(255,255,255,.30) 16%,
+      rgba(170,130,255,.10) 46%,
+      rgba(196,140,255,.62) 76%,
+      rgba(150,205,255,.95) 100%);
+  --gl-drop:
+      0 30px 60px -22px rgba(0,0,0,.85),
+      0 16px 34px -14px rgba(150,74,245,.55),
+      0 3px 14px -4px rgba(120,190,255,.30);
+  --gl-bevel:
+      inset 0 1.6px 0 rgba(255,255,255,.55),
+      inset 0 -1.6px 2px rgba(196,150,255,.35),
+      inset 0 26px 32px -30px rgba(255,255,255,.75),
+      inset 0 -30px 46px -34px rgba(170,110,255,.55);
+
+  --gt-fill:linear-gradient(158deg,rgba(255,255,255,.17) 0%,rgba(255,255,255,.05) 48%,rgba(200,160,255,.11) 100%);
+  --gt-drop:
+      0 16px 30px -14px rgba(0,0,0,.8),
+      0 8px 18px -8px rgba(150,74,245,.5);
+  --gt-bevel:
+      inset 0 1.4px 0 rgba(255,255,255,.6),
+      inset 0 -1.4px 2px rgba(200,150,255,.4),
+      inset 0 -14px 20px -18px rgba(170,110,255,.45);
+
+  --r-xl:34px;
+  --r-lg:28px;
+  --r-md:22px;
+  --r-pill:99px;
+  --pad:20px;
+  --gap:18px;
+  --air:38px;
+
+  --fs-hero:41px;
+  --fs-xl:21px;
+  --fs-lg:17px;
+  --fs-md:15px;
+  --fs-sm:13px;
+  --fs-xs:11px;
+
+  --safe-b:env(safe-area-inset-bottom,0px);
+  --nav-h:80px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:var(--fs-md);line-height:1.35;overflow-x:hidden;-webkit-font-smoothing:antialiased;
+  background:#120C1B;
+}
+
+/* ================= тёмный дымчатый фон ================= */
+.bgwrap{position:fixed;inset:0;z-index:-1;overflow:hidden;
+  background:linear-gradient(165deg,#1A1226 0%,#221630 26%,#150F20 52%,#241833 74%,#100B18 100%)}
+.bgwrap::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 85% at 50% 38%, rgba(255,255,255,.06) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,.62) 100%)}
+.blob{position:absolute;border-radius:50%;filter:blur(60px)}
+.b1{width:70vw;height:70vw;left:-22vw;top:-12vh;background:radial-gradient(circle,#8A4FD8 0%,rgba(138,79,216,0) 68%);opacity:.55}
+.b2{width:76vw;height:76vw;right:-28vw;top:4vh;background:radial-gradient(circle,#6D5BE0 0%,rgba(109,91,224,0) 68%);opacity:.5}
+.b3{width:72vw;height:72vw;left:-20vw;bottom:-10vh;background:radial-gradient(circle,#4C7BD8 0%,rgba(76,123,216,0) 68%);opacity:.4}
+.b4{width:60vw;height:60vw;right:-18vw;bottom:2vh;background:radial-gradient(circle,#C062C8 0%,rgba(192,98,200,0) 68%);opacity:.45}
+.b5{width:48vw;height:48vw;left:16vw;top:34vh;background:radial-gradient(circle,#7A4AA8 0%,rgba(122,74,168,0) 70%);opacity:.4}
+.beam{position:absolute;top:-30vh;left:-14vw;width:52vw;height:180vh;transform:rotate(21deg);
+  background:linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(226,205,255,.22) 46%,rgba(255,255,255,0) 100%);
+  filter:blur(34px);opacity:.6}
+.shade{position:absolute;background:rgba(0,0,0,.55);filter:blur(44px)}
+.s1{width:46vw;height:32vw;left:-10vw;top:8vh;border-radius:60% 40% 55% 45%/55% 60% 40% 45%;transform:rotate(-18deg)}
+.s2{width:38vw;height:26vw;right:0;top:40vh;border-radius:45% 55% 40% 60%/60% 45% 55% 40%;transform:rotate(24deg);opacity:.8}
+.s3{width:54vw;height:36vw;left:4vw;bottom:2vh;border-radius:55% 45% 60% 40%/45% 55% 45% 55%;transform:rotate(9deg);opacity:.7}
+
+button,input{font-family:inherit;font-size:inherit;color:inherit}
+button{border:0;background:none;cursor:pointer}
+.app{max-width:520px;margin:0 auto;padding:18px var(--pad) calc(var(--nav-h) + var(--safe-b) + 38px)}
+
+/* ================= стекло ================= */
+.glass{
+  position:relative;isolation:isolate;
+  background:var(--gl-fill);
+  -webkit-backdrop-filter:var(--gl-blur);backdrop-filter:var(--gl-blur);
+  border-radius:var(--r-lg);
+  box-shadow:var(--gl-drop),var(--gl-bevel);
+}
+.glass::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;padding:2px;pointer-events:none;z-index:2;
+  background:var(--gl-rim);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;
+}
+.glass::after{
+  content:"";position:absolute;left:5%;right:28%;top:3px;height:36%;pointer-events:none;z-index:1;
+  border-radius:50%;
+  background:linear-gradient(180deg,rgba(255,255,255,.42) 0%,rgba(255,255,255,0) 100%);
+  filter:blur(10px);opacity:.85;
+}
+@supports not ((-webkit-mask-composite:xor) or (mask-composite:exclude)){
+  .glass{border:1.6px solid rgba(255,255,255,.4)}
+  .glass::before{display:none}
+}
+@supports not ((backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px))){
+  .glass,.nav,.sheet{background:rgba(46,30,70,.88)}
+}
+
+.gt{position:relative;background:var(--gt-fill);box-shadow:var(--gt-drop),var(--gt-bevel)}
+.gt::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;padding:1.6px;pointer-events:none;z-index:2;
+  background:var(--gl-rim);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;
+}
+@supports not ((-webkit-mask-composite:xor) or (mask-composite:exclude)){
+  .gt{border:1.5px solid rgba(255,255,255,.42)}
+  .gt::before{display:none}
+}
+
+/* ================= шапка ================= */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:6px 4px 26px}
+.hello{font-size:var(--fs-sm);color:var(--dim);margin-bottom:4px}
+.name{font-size:var(--fs-xl);font-weight:700;letter-spacing:-.4px;text-shadow:0 2px 14px rgba(190,150,255,.45)}
+.streak{position:relative;display:inline-flex;align-items:center;gap:9px;padding:11px 18px;border-radius:var(--r-pill);
+  font-size:var(--fs-sm);font-weight:650;color:#FFE0C2;white-space:nowrap;
+  background:linear-gradient(158deg,rgba(255,190,120,.26) 0%,rgba(255,140,90,.10) 50%,rgba(255,170,110,.22) 100%);
+  -webkit-backdrop-filter:blur(14px) saturate(150%);backdrop-filter:blur(14px) saturate(150%);
+  box-shadow:0 16px 30px -14px rgba(0,0,0,.8), 0 8px 20px -8px rgba(255,140,60,.5),
+    inset 0 1.4px 0 rgba(255,255,255,.55), inset 0 -1.4px 2px rgba(255,190,130,.45);
+  text-shadow:0 0 12px rgba(255,160,80,.6)}
+.streak::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.6px;pointer-events:none;
+  background:linear-gradient(162deg,rgba(255,255,255,.95),rgba(255,200,140,.25) 40%,rgba(255,160,90,.75));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude}
+.streak .fi{width:17px;height:17px;flex:0 0 17px;filter:drop-shadow(0 0 6px rgba(255,150,60,.9))}
+
+/* ================= остаток ================= */
+.hero{padding:28px 24px;border-radius:var(--r-xl);overflow:hidden}
+.hero-glow{position:absolute;inset:-35% -18% auto -18%;height:160%;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(38% 46% at 18% 24%, rgba(240,122,216,.42) 0%, rgba(240,122,216,0) 70%),
+    radial-gradient(44% 52% at 86% 14%, rgba(150,90,255,.48) 0%, rgba(150,90,255,0) 70%),
+    radial-gradient(40% 48% at 60% 96%, rgba(90,200,255,.34) 0%, rgba(90,200,255,0) 70%);
+  filter:blur(10px)}
+.hero>*{position:relative;z-index:3}
+.hero-row{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.lbl{font-size:var(--fs-xs);text-transform:uppercase;letter-spacing:1.4px;color:var(--dim);font-weight:650}
+.sum{font-size:var(--fs-hero);font-weight:800;letter-spacing:-1.7px;margin:11px 0 7px;white-space:nowrap;
+  background:linear-gradient(112deg,#FFFFFF 0%,#E4CCFF 42%,#A9D8FF 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 18px rgba(196,150,255,.55))}
+.sub{font-size:var(--fs-sm);color:var(--muted)}
+.ring{position:relative;flex:0 0 92px;width:92px;height:92px;filter:drop-shadow(0 0 12px rgba(180,120,255,.8))}
+.ring svg{transform:rotate(-90deg)}
+.ring .pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:var(--fs-md);font-weight:750;color:#F0E6FF;text-shadow:0 0 10px rgba(190,140,255,.9)}
+.bar{height:12px;border-radius:var(--r-pill);margin-top:22px;overflow:hidden;position:relative;
+  background:rgba(0,0,0,.42);
+  box-shadow:inset 0 2px 5px rgba(0,0,0,.7), inset 0 -1.2px 0 rgba(255,255,255,.22)}
+.bar>i{display:block;height:100%;border-radius:var(--r-pill);width:0;transition:width .6s ease;
+  background:linear-gradient(90deg,var(--mint) 0%,var(--violet) 52%,var(--pink) 100%);
+  box-shadow:0 0 18px rgba(190,120,255,.95), inset 0 1.5px 0 rgba(255,255,255,.6)}
+.daily{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:24px;
+  padding:17px 19px;border-radius:var(--r-md)}
+.daily .k{font-size:var(--fs-sm);color:var(--muted);position:relative;z-index:3}
+.daily .sub{position:relative;z-index:3;color:var(--dim)}
+.daily .v{font-size:var(--fs-xl);font-weight:750;letter-spacing:-.5px;white-space:nowrap;position:relative;z-index:3;
+  color:#EFE4FF;text-shadow:0 0 14px rgba(190,140,255,.8)}
+
+/* ================= быстрые траты ================= */
+.quick{display:flex;gap:12px;overflow-x:auto;padding:6px 6px 10px;margin:0 -6px;scrollbar-width:none}
+.quick::-webkit-scrollbar{display:none}
+.qbtn{flex:0 0 auto;display:flex;align-items:center;gap:12px;padding:12px 20px 12px 12px;border-radius:var(--r-pill);
+  transition:transform .13s ease, box-shadow .16s ease}
+.qbtn:active{transform:translateY(3px) scale(.98);
+  box-shadow:0 4px 12px -8px rgba(0,0,0,.9), inset 0 2px 8px rgba(0,0,0,.6)}
+.qbtn .qt{font-size:var(--fs-sm);font-weight:650;line-height:1.15;position:relative;z-index:3}
+.qbtn .qa{font-size:var(--fs-xs);color:var(--muted);display:block;margin-top:3px}
+
+/* ================= плашка-иконка: стеклянный пузырь ================= */
+.ico{flex:0 0 50px;height:50px;border-radius:50%;position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:center}
+.ico::after{content:"";position:absolute;inset:0;z-index:0;
+  background:radial-gradient(58% 58% at 50% 62%, var(--tint,#B9A6FF) 0%, transparent 76%);opacity:.55}
+.ico .gi{position:relative;z-index:3}
+.ico.sm{flex:0 0 38px;height:38px}
+.gi{width:27px;height:27px;display:block;
+  filter:drop-shadow(0 0 7px rgba(255,255,255,.35)) drop-shadow(0 3px 5px rgba(0,0,0,.6))}
+.ico.sm .gi{width:20px;height:20px}
+.mi{width:21px;height:21px;display:block}
+
+/* ================= пришло / ушло ================= */
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
+.stat{padding:20px}
+.stat .row{display:flex;align-items:center;gap:11px;color:var(--muted);font-size:var(--fs-sm);position:relative;z-index:3}
+.dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative}
+.dot.in{color:#B9FFE6}
+.dot.in::after{content:"";position:absolute;inset:0;border-radius:inherit;z-index:0;
+  background:radial-gradient(60% 60% at 50% 58%,#3FE3B4 0%,rgba(63,227,180,0) 76%);opacity:.6}
+.dot.out{color:#FFC2D8}
+.dot.out::after{content:"";position:absolute;inset:0;border-radius:inherit;z-index:0;
+  background:radial-gradient(60% 60% at 50% 58%,#FF6FA8 0%,rgba(255,111,168,0) 76%);opacity:.6}
+.dot .mi{position:relative;z-index:3;filter:drop-shadow(0 0 5px currentColor)}
+.stat .val{font-size:var(--fs-xl);font-weight:750;letter-spacing:-.6px;margin-top:14px;white-space:nowrap;position:relative;z-index:3}
+.val.in{color:var(--up);text-shadow:0 0 14px rgba(95,224,176,.6)}
+.val.out{color:var(--down);text-shadow:0 0 14px rgba(255,143,182,.55)}
+
+/* ================= секции ================= */
+.sec{margin-top:var(--air);scroll-margin-top:16px}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 8px 16px}
+.sec-h h2{font-size:var(--fs-lg);font-weight:700;margin:0;letter-spacing:-.3px;text-shadow:0 2px 12px rgba(180,140,255,.4)}
+.sec-h .side{font-size:var(--fs-sm);color:var(--violet-lt);font-weight:650;white-space:nowrap}
+
+/* неделя */
+.week{padding:24px 20px 18px}
+.week-top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:20px;position:relative;z-index:3}
+.week-top .big{font-size:var(--fs-xl);font-weight:750;letter-spacing:-.5px}
+.week-top .cap{font-size:var(--fs-sm);color:var(--dim)}
+.chart{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;height:112px;position:relative;z-index:3}
+.col{flex:1;display:flex;flex-direction:column;align-items:center;gap:10px;min-width:0}
+.colbar{width:100%;max-width:32px;border-radius:16px;position:relative;overflow:hidden;
+  box-shadow:inset 0 1.4px 0 rgba(255,255,255,.6), inset 0 -1.4px 2px rgba(200,150,255,.5),
+    0 10px 20px -10px rgba(0,0,0,.9), 0 6px 16px -8px rgba(150,74,245,.6);
+  transition:height .5s ease}
+.colbar>i{position:absolute;inset:0;border-radius:inherit;
+  background:linear-gradient(180deg,rgba(232,216,255,.55) 0%,rgba(150,90,245,.75) 100%)}
+.colbar::after{content:"";position:absolute;left:18%;right:52%;top:4px;bottom:4px;border-radius:99px;
+  background:linear-gradient(180deg,rgba(255,255,255,.75),rgba(255,255,255,0));filter:blur(2px)}
+.col.today .colbar>i{background:linear-gradient(180deg,rgba(255,178,238,.75) 0%,rgba(240,122,216,.85) 50%,rgba(150,90,245,.9) 100%)}
+.col.today .colbar{box-shadow:inset 0 1.4px 0 rgba(255,255,255,.7), 0 0 24px rgba(240,122,216,.85), 0 10px 20px -10px rgba(0,0,0,.9)}
+.col .d{font-size:var(--fs-xs);color:var(--dim);font-weight:650}
+.col.today .d{color:var(--pink);text-shadow:0 0 10px rgba(240,122,216,.9)}
+
+/* топ категорий */
+.tops{padding:12px 20px 18px}
+.trow{padding:16px 0;display:flex;align-items:center;gap:15px;position:relative;z-index:3}
+.trow+.trow{border-top:1px solid rgba(255,255,255,.10)}
+.trow .tm{flex:1;min-width:0}
+.trow .tn{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.trow .tn b{font-weight:650;font-size:var(--fs-md)}
+.trow .tn span{font-size:var(--fs-md);font-weight:700;white-space:nowrap}
+.tbar{height:9px;border-radius:var(--r-pill);margin-top:11px;background:rgba(0,0,0,.42);overflow:hidden;
+  box-shadow:inset 0 2px 4px rgba(0,0,0,.7), inset 0 -1.2px 0 rgba(255,255,255,.18)}
+.tbar>i{display:block;height:100%;border-radius:var(--r-pill);
+  background:linear-gradient(90deg,var(--tint,#A97BFF),rgba(255,255,255,.95));
+  box-shadow:0 0 14px var(--tint,#A97BFF), inset 0 1.4px 0 rgba(255,255,255,.6)}
+.tshare{font-size:var(--fs-xs);color:var(--dim);margin-top:8px}
+
+/* списки */
+.list{padding:8px 6px}
+.item{display:flex;align-items:center;gap:16px;padding:15px 15px;border-radius:var(--r-md);position:relative;z-index:3}
+.item+.item::before{content:"";position:absolute;left:82px;right:15px;top:0;height:1px;
+  background:linear-gradient(90deg,rgba(255,255,255,.16),rgba(255,255,255,.02))}
+.mid{flex:1;min-width:0}
+.mid .t{font-weight:650;font-size:var(--fs-md);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mid .s{font-size:var(--fs-sm);color:var(--dim);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.amt{font-weight:700;font-size:var(--fs-md);white-space:nowrap}
+.amt.in{color:var(--up);text-shadow:0 0 12px rgba(95,224,176,.5)}
+.amt.out{color:var(--text)}
+.empty{padding:30px 16px;text-align:center;color:var(--dim);font-size:var(--fs-sm);position:relative;z-index:3}
+
+.subs-total{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 20px;
+  margin-bottom:14px;border-radius:var(--r-md);font-size:var(--fs-sm);color:var(--muted);font-weight:650}
+.subs-total span{position:relative;z-index:3}
+.subs-total b{font-size:var(--fs-lg);letter-spacing:-.3px;white-space:nowrap;position:relative;z-index:3;
+  color:#F0E4FF;text-shadow:0 0 14px rgba(190,140,255,.85)}
+
+/* ================= нижняя панель ================= */
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:40;
+  background:linear-gradient(180deg,rgba(30,20,45,.55) 0%,rgba(18,12,27,.85) 70%);
+  -webkit-backdrop-filter:blur(26px) saturate(160%);backdrop-filter:blur(26px) saturate(160%);
+  box-shadow:0 -24px 48px -22px rgba(0,0,0,.9), inset 0 1.5px 0 rgba(255,255,255,.35);
+  padding:10px 12px calc(8px + var(--safe-b))}
+.nav-in{max-width:520px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);align-items:end}
+.tab{display:flex;flex-direction:column;align-items:center;gap:5px;color:#7E729E;font-size:var(--fs-xs);
+  padding:6px 0;transition:color .18s ease,transform .12s ease}
+.tab:active{transform:scale(.94)}
+.tab.on{color:var(--violet-lt);font-weight:650;text-shadow:0 0 12px rgba(190,140,255,.8)}
+.tab.on .mi{filter:drop-shadow(0 0 8px rgba(190,140,255,.95))}
+.fab{justify-self:center;width:68px;height:68px;border-radius:50%;margin-top:-32px;color:#fff;position:relative;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+  background:linear-gradient(160deg,rgba(255,255,255,.42) 0%,rgba(190,130,255,.35) 34%,rgba(120,60,220,.55) 72%,rgba(240,122,216,.5) 100%);
+  -webkit-backdrop-filter:blur(10px) saturate(160%);backdrop-filter:blur(10px) saturate(160%);
+  box-shadow:0 0 34px rgba(180,90,255,.85), 0 18px 32px -10px rgba(0,0,0,.9),
+    inset 0 2px 1px rgba(255,255,255,.9), inset 0 -16px 24px -10px rgba(200,140,255,.6),
+    inset 0 0 0 1.8px rgba(255,255,255,.5);
+  transition:transform .14s ease, box-shadow .14s ease}
+.fab::after{content:"";position:absolute;left:16%;right:32%;top:5px;height:42%;border-radius:50%;
+  background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,0));filter:blur(3px)}
+.fab:active{transform:translateY(3px) scale(.95);
+  box-shadow:0 0 20px rgba(180,90,255,.6), inset 0 3px 10px rgba(0,0,0,.6), inset 0 0 0 1.8px rgba(255,255,255,.35)}
+.fab .mi{width:28px;height:28px;position:relative;z-index:3;filter:drop-shadow(0 0 8px rgba(255,255,255,.9))}
+
+/* ================= форма ================= */
+.scrim{position:fixed;inset:0;z-index:50;background:rgba(8,4,16,.62);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  opacity:0;pointer-events:none;transition:opacity .24s ease}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:60;max-width:520px;margin:0 auto;
+  max-height:93vh;overflow-y:auto;border-radius:38px 38px 0 0;
+  padding:10px var(--pad) calc(22px + var(--safe-b));
+  background:linear-gradient(172deg,rgba(60,40,92,.62) 0%,rgba(24,16,38,.78) 100%);
+  -webkit-backdrop-filter:blur(30px) saturate(170%);backdrop-filter:blur(30px) saturate(170%);
+  box-shadow:0 -36px 70px -22px rgba(0,0,0,.92),
+    inset 0 1.8px 0 rgba(255,255,255,.55), inset 0 40px 50px -46px rgba(255,255,255,.5);
+  transform:translateY(102%);transition:transform .3s cubic-bezier(.32,.72,.3,1)}
+.sheet.on{transform:translateY(0)}
+.grab{width:46px;height:5px;border-radius:var(--r-pill);margin:6px auto 20px;
+  background:linear-gradient(180deg,rgba(255,255,255,.6),rgba(190,150,255,.35));
+  box-shadow:0 0 10px rgba(190,150,255,.6)}
+.sheet h3{margin:0 0 24px;font-size:var(--fs-xl);font-weight:700;letter-spacing:-.4px;text-align:center;
+  text-shadow:0 2px 16px rgba(190,150,255,.5)}
+
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:5px;border-radius:var(--r-pill);padding:5px;margin-bottom:24px;
+  background:rgba(0,0,0,.38);
+  box-shadow:inset 0 2px 6px rgba(0,0,0,.75), inset 0 -1.4px 0 rgba(255,255,255,.16)}
+.seg button{padding:14px;border-radius:var(--r-pill);font-weight:650;font-size:var(--fs-md);color:var(--dim);
+  transition:.18s;position:relative}
+.seg button.on{color:#fff;background:var(--gt-fill);
+  box-shadow:0 10px 20px -10px rgba(0,0,0,.9), 0 6px 16px -8px rgba(150,74,245,.6),
+    inset 0 1.4px 0 rgba(255,255,255,.6), inset 0 -1.4px 2px rgba(200,150,255,.45);
+  text-shadow:0 0 12px rgba(200,150,255,.7)}
+
+.field{margin-bottom:20px}
+.field>label{display:block;font-size:var(--fs-sm);color:var(--dim);margin:0 0 10px 8px;font-weight:500}
+.amount-box{display:flex;align-items:center;gap:10px;padding:18px 22px;border-radius:var(--r-lg);
+  background:rgba(0,0,0,.32);
+  box-shadow:inset 0 2px 8px rgba(0,0,0,.75), inset 0 -1.4px 0 rgba(255,255,255,.22),
+    inset 0 0 0 1.4px rgba(255,255,255,.14)}
+.amount-box input{flex:1;min-width:0;border:0;outline:0;background:none;font-size:37px;font-weight:800;
+  letter-spacing:-1.4px;padding:0;color:#fff;text-shadow:0 0 18px rgba(190,150,255,.6)}
+.amount-box .cur{font-size:27px;font-weight:700;color:#8E80B4}
+
+.chips{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.chip{display:flex;align-items:center;gap:12px;min-width:0;text-align:left;white-space:nowrap;overflow:hidden;
+  border-radius:var(--r-pill);padding:10px 17px 10px 10px;font-size:var(--fs-sm);font-weight:650;color:var(--text);
+  transition:transform .12s ease, box-shadow .16s ease, background .16s ease}
+.chip:active{transform:translateY(2px)}
+.chip span:not(.ico){position:relative;z-index:3}
+.chip.on{color:#fff;
+  background:linear-gradient(158deg,rgba(215,175,255,.42) 0%,rgba(150,80,240,.30) 55%,rgba(240,122,216,.34) 100%);
+  box-shadow:0 0 24px rgba(180,90,255,.75), 0 10px 22px -10px rgba(0,0,0,.9),
+    inset 0 1.4px 0 rgba(255,255,255,.7), inset 0 -1.4px 2px rgba(220,170,255,.55)}
+
+.inp{width:100%;border:0;border-radius:var(--r-md);padding:18px 19px;outline:0;font-size:var(--fs-md);color:var(--text);
+  background:rgba(0,0,0,.32);
+  box-shadow:inset 0 2px 8px rgba(0,0,0,.7), inset 0 -1.4px 0 rgba(255,255,255,.2),
+    inset 0 0 0 1.4px rgba(255,255,255,.13)}
+.inp::placeholder{color:#7E729E}
+.inp::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65)}
+
+.acts{display:grid;grid-template-columns:1fr 1.6fr;gap:13px;margin-top:28px}
+.btn{padding:20px;border-radius:var(--r-pill);font-weight:700;font-size:var(--fs-md);position:relative;overflow:hidden;
+  transition:transform .12s ease, box-shadow .14s ease}
+.btn.ghost{color:var(--muted)}
+.btn.main{color:#fff;
+  background:linear-gradient(160deg,rgba(255,255,255,.42) 0%,rgba(190,130,255,.38) 34%,rgba(120,60,220,.6) 72%,rgba(240,122,216,.52) 100%);
+  -webkit-backdrop-filter:blur(8px) saturate(160%);backdrop-filter:blur(8px) saturate(160%);
+  box-shadow:0 0 32px rgba(180,90,255,.8), 0 18px 32px -12px rgba(0,0,0,.9),
+    inset 0 2px 1px rgba(255,255,255,.9), inset 0 -16px 24px -10px rgba(200,140,255,.55),
+    inset 0 0 0 1.8px rgba(255,255,255,.5);
+  text-shadow:0 0 14px rgba(255,255,255,.7)}
+.btn.main::after{content:"";position:absolute;left:8%;right:28%;top:4px;height:44%;border-radius:50%;
+  background:linear-gradient(180deg,rgba(255,255,255,.85),rgba(255,255,255,0));filter:blur(4px)}
+.btn:active{transform:translateY(3px)}
+.btn[disabled]{opacity:.35;box-shadow:none;transform:none}
+
+/* ================= состояния ================= */
+.state{min-height:76vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:32px 26px;gap:8px}
+.state .pic{width:106px;height:106px;margin-bottom:14px;filter:drop-shadow(0 0 26px rgba(170,110,255,.85))}
+.state h2{margin:0;font-size:var(--fs-xl);font-weight:700}
+.state p{margin:0 0 22px;color:var(--muted);font-size:var(--fs-md);max-width:300px}
+.spin{width:36px;height:36px;border-radius:50%;border:3px solid rgba(190,150,255,.2);border-top-color:var(--violet-lt);
+  animation:sp .8s linear infinite;box-shadow:0 0 20px rgba(170,110,255,.6)}
+@keyframes sp{to{transform:rotate(360deg)}}
+.hidden{display:none!important}
+
+.toast{position:fixed;left:50%;bottom:calc(var(--nav-h) + var(--safe-b) + 22px);transform:translate(-50%,16px);
+  z-index:80;display:flex;align-items:center;gap:14px;padding:15px 16px 15px 22px;border-radius:var(--r-pill);
+  font-size:var(--fs-sm);font-weight:600;color:#fff;max-width:calc(100vw - 40px);
+  background:linear-gradient(158deg,rgba(120,70,210,.55),rgba(28,16,52,.85));
+  -webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%);
+  box-shadow:0 24px 44px -14px rgba(0,0,0,.95), 0 8px 24px -8px rgba(150,74,245,.6),
+    inset 0 1.5px 0 rgba(255,255,255,.55), inset 0 -1.5px 2px rgba(200,150,255,.4);
+  opacity:0;pointer-events:none;transition:.26s}
+.toast.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.toast .undo{padding:9px 16px;border-radius:var(--r-pill);font-weight:700;font-size:var(--fs-sm);color:#fff;
+  background:rgba(255,255,255,.16);white-space:nowrap;
+  box-shadow:inset 0 1.4px 0 rgba(255,255,255,.6), inset 0 0 0 1.2px rgba(255,255,255,.28)}
+
+</style>
+</head>
+<body>
+<div class="bgwrap"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div><div class="blob b5"></div><div class="shade s1"></div><div class="shade s2"></div><div class="shade s3"></div><div class="beam"></div></div>
+
+<!-- ============ НАРИСОВАННЫЕ ИКОНКИ ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+  <linearGradient id="g-food" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8CE3B7"/><stop offset="1" stop-color="#209C68"/></linearGradient>
+  <linearGradient id="g-cafe" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFCC96"/><stop offset="1" stop-color="#EE8A32"/></linearGradient>
+  <linearGradient id="g-transport" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B3A6FF"/><stop offset="1" stop-color="#6A49DE"/></linearGradient>
+  <linearGradient id="g-home" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#CFB4FF"/><stop offset="1" stop-color="#8B57EE"/></linearGradient>
+  <linearGradient id="g-services" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9CCCFF"/><stop offset="1" stop-color="#3B7CDE"/></linearGradient>
+  <linearGradient id="g-sparkle" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E0D2FF"/><stop offset="1" stop-color="#A184F3"/></linearGradient>
+  <linearGradient id="g-briefcase" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8FE0DA"/><stop offset="1" stop-color="#12908C"/></linearGradient>
+  <linearGradient id="g-crystal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#DCB6FF"/><stop offset="1" stop-color="#8846DE"/></linearGradient>
+  <linearGradient id="g-refund" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9BDCFF"/><stop offset="1" stop-color="#2C97D6"/></linearGradient>
+  <linearGradient id="g-wifi" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9CCCFF"/><stop offset="1" stop-color="#3B7CDE"/></linearGradient>
+  <linearGradient id="g-spark" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#CDB8FF"/><stop offset="1" stop-color="#7550E8"/></linearGradient>
+  <linearGradient id="g-server" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B6ACFF"/><stop offset="1" stop-color="#6156E0"/></linearGradient>
+  <linearGradient id="g-phone" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8CE3B7"/><stop offset="1" stop-color="#209C68"/></linearGradient>
+  <linearGradient id="g-cloud" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFD9AC"/><stop offset="1" stop-color="#EE9A36"/></linearGradient>
+  <linearGradient id="g-doc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#C9B8FA"/><stop offset="1" stop-color="#6C4CE0"/></linearGradient>
+  <linearGradient id="g-fire" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFD07A"/><stop offset="1" stop-color="#F26A3D"/></linearGradient>
+</defs>
+
+<symbol id="i-food" viewBox="0 0 48 48">
+  <path d="M18 19.5v-5a6 6 0 0 1 12 0v5" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="5.4" stroke-linecap="round"/>
+  <path d="M11 17h26a3.2 3.2 0 0 1 3.2 3.5l-1.9 17.3A4.4 4.4 0 0 1 34 41.7H14A4.4 4.4 0 0 1 9.7 37.8L7.8 20.5A3.2 3.2 0 0 1 11 17Z" fill="url(#g-food)"/>
+  <ellipse cx="17" cy="24.5" rx="4.6" ry="3.2" fill="#fff" opacity=".3"/>
+  <path d="M18 19.5v-5a6 6 0 0 1 12 0v5" fill="none" stroke="url(#g-food)" stroke-width="3.8" stroke-linecap="round"/>
+</symbol>
+<symbol id="i-cafe" viewBox="0 0 48 48">
+  <path d="M13 17h22l-2.4 20.6A5 5 0 0 1 27.6 42h-7.2a5 5 0 0 1-5-4.4Z" fill="url(#g-cafe)"/>
+  <rect x="10.5" y="10.5" width="27" height="7.5" rx="3.7" fill="#fff" opacity=".82"/>
+  <rect x="15.5" y="23" width="17" height="5" rx="2.5" fill="#fff" opacity=".33"/>
+  <ellipse cx="18.5" cy="21" rx="3.2" ry="2" fill="#fff" opacity=".35"/>
+</symbol>
+<symbol id="i-transport" viewBox="0 0 48 48">
+  <path d="M13.5 25 17 17.6A4.4 4.4 0 0 1 21 15h6a4.4 4.4 0 0 1 4 2.6L34.5 25Z" fill="#fff" opacity=".55"/>
+  <rect x="7" y="23" width="34" height="12.5" rx="5" fill="url(#g-transport)"/>
+  <rect x="12" y="26.5" width="9" height="4.5" rx="2.2" fill="#fff" opacity=".45"/>
+  <rect x="27" y="26.5" width="9" height="4.5" rx="2.2" fill="#fff" opacity=".45"/>
+  <circle cx="15" cy="36.5" r="3.6" fill="#2B1F55" opacity=".55"/>
+  <circle cx="33" cy="36.5" r="3.6" fill="#2B1F55" opacity=".55"/>
+</symbol>
+<symbol id="i-home" viewBox="0 0 48 48">
+  <path d="M24 7.5 41.4 21a2.2 2.2 0 0 1-1.4 3.9H8a2.2 2.2 0 0 1-1.4-3.9Z" fill="#fff" opacity=".6"/>
+  <path d="M11 24.5h26V38a3.5 3.5 0 0 1-3.5 3.5h-19A3.5 3.5 0 0 1 11 38Z" fill="url(#g-home)"/>
+  <path d="M20 41.5V33a4 4 0 0 1 8 0v8.5Z" fill="#fff" opacity=".75"/>
+  <ellipse cx="16" cy="29" rx="3" ry="2.2" fill="#fff" opacity=".3"/>
+</symbol>
+<symbol id="i-services" viewBox="0 0 48 48">
+  <rect x="9" y="10" width="30" height="21.5" rx="4" fill="url(#g-services)"/>
+  <rect x="12.6" y="13.6" width="22.8" height="14.3" rx="2.4" fill="#fff" opacity=".4"/>
+  <rect x="5.5" y="32.5" width="37" height="5.5" rx="2.7" fill="#fff" opacity=".72"/>
+  <ellipse cx="16" cy="17" rx="3.4" ry="2.2" fill="#fff" opacity=".4"/>
+</symbol>
+<symbol id="i-sparkle" viewBox="0 0 48 48">
+  <path d="M22 6c1.9 10 4.6 12.7 14.6 14.6C26.6 22.5 23.9 25.2 22 35.2 20.1 25.2 17.4 22.5 7.4 20.6 17.4 18.7 20.1 16 22 6Z" fill="url(#g-sparkle)"/>
+  <path d="M35.5 29c.9 4.4 2.1 5.6 6.5 6.5-4.4.9-5.6 2.1-6.5 6.5-.9-4.4-2.1-5.6-6.5-6.5 4.4-.9 5.6-2.1 6.5-6.5Z" fill="url(#g-sparkle)" opacity=".75"/>
+  <ellipse cx="18" cy="16" rx="2.6" ry="3.4" fill="#fff" opacity=".45" transform="rotate(-30 18 16)"/>
+</symbol>
+<symbol id="i-briefcase" viewBox="0 0 48 48">
+  <path d="M18.5 17v-3a3.5 3.5 0 0 1 3.5-3.5h4a3.5 3.5 0 0 1 3.5 3.5v3" fill="none" stroke="url(#g-briefcase)" stroke-width="3.4" stroke-linecap="round"/>
+  <rect x="7" y="16.5" width="34" height="23.5" rx="5.5" fill="url(#g-briefcase)"/>
+  <rect x="7" y="24" width="34" height="5.5" fill="#fff" opacity=".3"/>
+  <rect x="20.5" y="23" width="7" height="7.5" rx="2.6" fill="#fff" opacity=".85"/>
+  <ellipse cx="14" cy="21" rx="3.4" ry="2" fill="#fff" opacity=".3"/>
+</symbol>
+<symbol id="i-crystal" viewBox="0 0 48 48">
+  <path d="M16.5 8h15l4.5 10H12Z" fill="url(#g-crystal)"/>
+  <path d="M12 18h24L24 41.5Z" fill="url(#g-crystal)"/>
+  <path d="M16.5 8h5.5l-2 10H12Z" fill="#fff" opacity=".32"/>
+  <path d="M12 18h7.5l4.5 23.5Z" fill="#fff" opacity=".22"/>
+  <path d="M12 18h24" stroke="#fff" stroke-opacity=".5" stroke-width="1.7"/>
+</symbol>
+<symbol id="i-refund" viewBox="0 0 48 48">
+  <path d="M38 24a14.5 14.5 0 1 1-5.3-11.2" fill="none" stroke="url(#g-refund)" stroke-width="6.2" stroke-linecap="round"/>
+  <path d="M36.5 6.5 38.2 19 25.8 17Z" fill="url(#g-refund)"/>
+  <path d="M13.5 17a14 14 0 0 1 7-5.5" stroke="#fff" stroke-opacity=".5" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+</symbol>
+<symbol id="i-wifi" viewBox="0 0 48 48">
+  <path d="M9.5 20.5a20.5 20.5 0 0 1 29 0" fill="none" stroke="url(#g-wifi)" stroke-width="5.6" stroke-linecap="round"/>
+  <path d="M16 27.5a11.4 11.4 0 0 1 16 0" fill="none" stroke="url(#g-wifi)" stroke-width="5.6" stroke-linecap="round"/>
+  <circle cx="24" cy="35.5" r="3.8" fill="url(#g-wifi)"/>
+  <path d="M13 19.5a17 17 0 0 1 7-4.4" stroke="#fff" stroke-opacity=".55" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+</symbol>
+<symbol id="i-spark" viewBox="0 0 48 48">
+  <g stroke="url(#g-spark)" stroke-width="5.4" stroke-linecap="round">
+    <path d="M24 7.5v33"/><path d="M9.7 15.8 38.3 32.2"/><path d="M9.7 32.2 38.3 15.8"/>
+  </g>
+  <circle cx="24" cy="24" r="3.4" fill="#fff" opacity=".45"/>
+</symbol>
+<symbol id="i-server" viewBox="0 0 48 48">
+  <rect x="7.5" y="11" width="33" height="11.5" rx="4.2" fill="url(#g-server)"/>
+  <rect x="7.5" y="25.5" width="33" height="11.5" rx="4.2" fill="url(#g-server)"/>
+  <circle cx="14" cy="16.8" r="2.3" fill="#fff" opacity=".9"/>
+  <circle cx="14" cy="31.3" r="2.3" fill="#fff" opacity=".55"/>
+  <rect x="20" y="15.6" width="15" height="2.6" rx="1.3" fill="#fff" opacity=".38"/>
+  <rect x="20" y="30.1" width="15" height="2.6" rx="1.3" fill="#fff" opacity=".38"/>
+</symbol>
+<symbol id="i-phone" viewBox="0 0 48 48">
+  <rect x="13.5" y="6.5" width="21" height="35" rx="5.5" fill="url(#g-phone)"/>
+  <rect x="16.8" y="11.5" width="14.4" height="23" rx="2.6" fill="#fff" opacity=".42"/>
+  <rect x="21" y="8.6" width="6" height="1.9" rx=".95" fill="#fff" opacity=".7"/>
+  <rect x="20.5" y="36.4" width="7" height="2.2" rx="1.1" fill="#fff" opacity=".8"/>
+</symbol>
+<symbol id="i-cloud" viewBox="0 0 48 48">
+  <path d="M14.8 37A8.7 8.7 0 0 1 15.4 19.6a11.2 11.2 0 0 1 20.8-1.6A8.9 8.9 0 0 1 34 37Z" fill="url(#g-cloud)"/>
+  <ellipse cx="19.5" cy="24" rx="4.6" ry="3" fill="#fff" opacity=".38"/>
+</symbol>
+<symbol id="i-doc" viewBox="0 0 48 48">
+  <path d="M12 6h17l9 9v24a3.5 3.5 0 0 1-3.5 3.5h-22.5A3.5 3.5 0 0 1 8.5 39V9.5A3.5 3.5 0 0 1 12 6Z" fill="url(#g-doc)"/>
+  <path d="M29 6l9 9h-9Z" fill="#fff" opacity=".5"/>
+  <rect x="15" y="22" width="18" height="3.2" rx="1.6" fill="#fff" opacity=".55"/>
+  <rect x="15" y="29" width="12" height="3.2" rx="1.6" fill="#fff" opacity=".4"/>
+</symbol>
+<symbol id="i-fire" viewBox="0 0 24 24">
+  <path d="M12.8 1.5c.4 3.2-1.1 4.6-2.6 6-1.6 1.5-3.2 3-3.2 6.1a7 7 0 0 0 14 0c0-3.4-1.9-5.6-3.6-7.2-.4 1.3-1.3 2-2.1 2 .5-2.6-.9-5.3-2.5-6.9Z" fill="url(#g-fire)"/>
+  <path d="M12 12.2c1.6 1.2 2.6 2.4 2.6 4a2.6 2.6 0 0 1-5.2 0c0-1.5.9-2.8 2.6-4Z" fill="#fff" opacity=".55"/>
+</symbol>
+
+<symbol id="m-home" viewBox="0 0 24 24"><path d="M11.2 3.1 3.3 9.5a2.1 2.1 0 0 0-.8 1.6v8.3A1.6 1.6 0 0 0 4.1 21H9v-5.5a3 3 0 0 1 6 0V21h4.9a1.6 1.6 0 0 0 1.6-1.6v-8.3a2.1 2.1 0 0 0-.8-1.6l-7.9-6.4a1.3 1.3 0 0 0-1.6 0Z" fill="currentColor"/></symbol>
+<symbol id="m-chart" viewBox="0 0 24 24"><rect x="3" y="13" width="4" height="8" rx="1.6" fill="currentColor"/><rect x="10" y="7.5" width="4" height="13.5" rx="1.6" fill="currentColor"/><rect x="17" y="3" width="4" height="18" rx="1.6" fill="currentColor"/></symbol>
+<symbol id="m-calendar" viewBox="0 0 24 24"><path d="M7.2 2.4c.7 0 1.2.6 1.2 1.2V5h7.2V3.6a1.2 1.2 0 0 1 2.4 0V5h.7A2.9 2.9 0 0 1 21.6 7.9v10.2a2.9 2.9 0 0 1-2.9 2.9H5.3a2.9 2.9 0 0 1-2.9-2.9V7.9A2.9 2.9 0 0 1 5.3 5H6V3.6c0-.6.5-1.2 1.2-1.2ZM4.8 10.3v7.8c0 .3.2.5.5.5h13.4c.3 0 .5-.2.5-.5v-7.8Z" fill="currentColor"/></symbol>
+<symbol id="m-user" viewBox="0 0 24 24"><circle cx="12" cy="7.8" r="4.6" fill="currentColor"/><path d="M12 14.2c-4.5 0-8.2 2.5-8.2 5.6 0 .7.5 1.2 1.2 1.2h14c.7 0 1.2-.5 1.2-1.2 0-3.1-3.7-5.6-8.2-5.6Z" fill="currentColor"/></symbol>
+<symbol id="m-plus" viewBox="0 0 24 24"><path d="M12 4.5v15M4.5 12h15" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></symbol>
+<symbol id="m-down" viewBox="0 0 24 24"><path d="M12 5v13m0 0 5.2-5.2M12 18l-5.2-5.2" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+<symbol id="m-up" viewBox="0 0 24 24"><path d="M12 19V6m0 0 5.2 5.2M12 6 6.8 11.2" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+</svg>
+
+<div id="loading" class="state"><div class="spin"></div></div>
+
+<div id="error" class="state hidden">
+  <svg class="pic" viewBox="0 0 48 48"><use href="#i-doc"></use></svg>
+  <h2>Не удалось загрузить данные</h2>
+  <p>Файл data.json не открылся или повреждён. Проверь, что он лежит рядом с index.html.</p>
+  <button class="btn main" style="padding:16px 34px" onclick="loadData()">Обновить</button>
+</div>
+
+<div id="app" class="app hidden">
+
+  <div class="top">
+    <div>
+      <div class="hello" id="greet">Привет,</div>
+      <div class="name" id="owner">—</div>
+    </div>
+    <div class="streak" id="streak"><svg class="fi" viewBox="0 0 24 24"><use href="#i-fire"></use></svg><span id="streakTxt">—</span></div>
+  </div>
+
+  <!-- 1. остаток -->
+  <div class="glass hero"><div class="hero-glow"></div>
+    <div class="hero-row">
+      <div style="min-width:0">
+        <div class="lbl" id="monthLbl">месяц</div>
+        <div class="sum" id="balance">—</div>
+        <div class="sub" id="budgetSub">—</div>
+      </div>
+      <div class="ring">
+        <svg width="88" height="88" viewBox="0 0 88 88">
+          <circle cx="44" cy="44" r="36" fill="none" stroke="rgba(255,255,255,.10)" stroke-width="9"/>
+          <circle id="ringArc" cx="44" cy="44" r="36" fill="none" stroke="url(#g-ring)" stroke-width="9"
+                  stroke-linecap="round" stroke-dasharray="226.2" stroke-dashoffset="226.2"
+                  style="transition:stroke-dashoffset .6s ease"/>
+          <defs><linearGradient id="g-ring" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#6E9BFF"/><stop offset="55%" stop-color="#A66BFF"/><stop offset="1" stop-color="#FF6FC5"/>
+          </linearGradient></defs>
+        </svg>
+        <div class="pct" id="ringPct">0%</div>
+      </div>
+    </div>
+    <div class="bar"><i id="barFill"></i></div>
+    <div class="daily gt">
+      <div style="min-width:0"><div class="k">Свободно на день</div><div class="sub" id="dailyNote" style="margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">—</div></div>
+      <div class="v" id="dailyVal">—</div>
+    </div>
+  </div>
+
+  <!-- быстрые траты -->
+  <div class="sec" style="margin-top:22px">
+    <div class="sec-h"><h2>Быстрая запись</h2><span class="side">один тап</span></div>
+    <div class="quick" id="quickRow"></div>
+  </div>
+
+  <!-- 2. пришло / ушло -->
+  <div class="sec">
+    <div class="stats">
+      <div class="glass stat">
+        <div class="row"><span class="dot in gt"><svg class="mi" style="width:16px;height:16px"><use href="#m-down"></use></svg></span> Пришло</div>
+        <div class="val in" id="incomeVal">—</div>
+      </div>
+      <div class="glass stat">
+        <div class="row"><span class="dot out gt"><svg class="mi" style="width:16px;height:16px"><use href="#m-up"></use></svg></span> Ушло</div>
+        <div class="val out" id="expenseVal">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- неделя -->
+  <div class="sec" id="secWeek">
+    <div class="sec-h"><h2>Эта неделя</h2><span class="side" id="weekAvg"></span></div>
+    <div class="glass week">
+      <div class="week-top"><div class="big" id="weekSum">—</div><div class="cap">за 7 дней</div></div>
+      <div class="chart" id="chart"></div>
+    </div>
+  </div>
+
+  <!-- топ категорий -->
+  <div class="sec" id="secTop">
+    <div class="sec-h"><h2>Куда уходит</h2><span class="side" id="topCap"></span></div>
+    <div class="glass tops" id="topsList"></div>
+  </div>
+
+  <!-- последние операции -->
+  <div class="sec" id="secOps">
+    <div class="sec-h"><h2>Последние операции</h2><span class="side" id="opsCount"></span></div>
+    <div class="glass list" id="opsList"></div>
+  </div>
+
+  <!-- подписки -->
+  <div class="sec" id="secSubs">
+    <div class="sec-h"><h2>Ближайшие списания</h2></div>
+    <div class="glass subs-total"><span>Всего в месяц на подписки</span> <b id="subsTotal">—</b></div>
+    <div class="glass list" id="subsList"></div>
+  </div>
+</div>
+
+<nav class="nav hidden" id="nav">
+  <div class="nav-in">
+    <button class="tab on" data-go="top"><svg class="mi"><use href="#m-home"></use></svg>Главная</button>
+    <button class="tab" data-go="secWeek"><svg class="mi"><use href="#m-chart"></use></svg>Аналитика</button>
+    <button class="fab" id="fab" aria-label="Добавить"><svg class="mi"><use href="#m-plus"></use></svg></button>
+    <button class="tab" data-go="secSubs"><svg class="mi"><use href="#m-calendar"></use></svg>Подписки</button>
+    <button class="tab" data-soon="1"><svg class="mi"><use href="#m-user"></use></svg>Профиль</button>
+  </div>
+</nav>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true">
+  <div class="grab"></div>
+  <h3 id="sheetTitle">Новая трата</h3>
+  <div class="seg">
+    <button id="segExpense" class="on">Трата</button>
+    <button id="segIncome">Доход</button>
+  </div>
+  <div class="field">
+    <label for="fAmount">Сумма</label>
+    <div class="amount-box">
+      <input id="fAmount" type="text" inputmode="decimal" placeholder="0" autocomplete="off">
+      <span class="cur" id="fCur">₽</span>
+    </div>
+  </div>
+  <div class="field"><label>Категория</label><div class="chips" id="fCats"></div></div>
+  <div class="field"><label for="fDate">Дата</label><input id="fDate" class="inp" type="date"></div>
+  <div class="field"><label for="fComment">Комментарий</label><input id="fComment" class="inp" type="text" placeholder="Необязательно" maxlength="60"></div>
+  <div class="acts">
+    <button class="btn ghost gt" id="btnCancel">Отмена</button>
+    <button class="btn main" id="btnSave">Сохранить</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span id="toastTxt"></span><button class="undo hidden" id="toastUndo">Отменить</button></div>
+
+<script>
+/* ---------- Telegram SDK ---------- */
+var TG = null;
+try {
+  if (window.Telegram && window.Telegram.WebApp) {
+    TG = window.Telegram.WebApp;
+    TG.ready(); TG.expand();
+    try { if (TG.setHeaderColor) TG.setHeaderColor('#171126'); } catch(e){}
+    try { if (TG.setBackgroundColor) TG.setBackgroundColor('#0E0A16'); } catch(e){}
+  }
+} catch (e) { TG = null; }
+function haptic(k){ try { if (TG && TG.HapticFeedback) TG.HapticFeedback.impactOccurred(k || 'light'); } catch(e){} }
+
+/* ---------- состояние ---------- */
+var DATA = null, TX = [], form = { type:'expense', categoryId:null }, lastAddedId = null;
+var ICONS = ['food','cafe','transport','home','services','sparkle','briefcase','crystal','refund','wifi','spark','server','phone','cloud'];
+var MONTHS = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+var MONTHS_NOM = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+var WD = ['вс','пн','вт','ср','чт','пт','сб'];
+var $ = function(id){ return document.getElementById(id); };
+
+function money(n){
+  var v = Math.round(Math.abs(Number(n) || 0));
+  return v.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ' + cur();
+}
+function shortMoney(n){
+  var v = Math.round(Math.abs(Number(n) || 0));
+  if (v >= 1000) return (v / 1000).toFixed(v >= 10000 ? 0 : 1).replace('.0','') + 'к';
+  return String(v);
+}
+function cur(){ return (DATA && DATA.settings && DATA.settings.currency) || '₽'; }
+function pad(n){ return (n < 10 ? '0' : '') + n; }
+function iso(d){ return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()); }
+function todayISO(){ return iso(new Date()); }
+function parseISO(s){ var p = String(s || '').split('-'); return new Date(+p[0], (+p[1]||1)-1, +p[2]||1); }
+function daysBetween(a, b){ return Math.round((parseISO(b) - parseISO(a)) / 86400000); }
+function plural(n, one, few, many){
+  var a = Math.abs(n) % 100, b = a % 10;
+  if (a > 10 && a < 20) return many;
+  if (b > 1 && b < 5) return few;
+  if (b === 1) return one;
+  return many;
+}
+
+function refMonth(){
+  var m = DATA && DATA.settings && DATA.settings.month;
+  if (m && /^\d{4}-\d{2}$/.test(m)) return m;
+  return todayISO().slice(0, 7);
+}
+/* «сегодня» внутри расчётного месяца */
+function refToday(){
+  var t = todayISO();
+  if (t.slice(0, 7) === refMonth()) return t;
+  var inMonth = TX.filter(function(x){ return String(x.date||'').slice(0,7) === refMonth(); })
+                  .map(function(x){ return x.date; }).sort();
+  return inMonth.length ? inMonth[inMonth.length - 1] : refMonth() + '-01';
+}
+function daysInMonth(m){
+  var p = m.split('-');
+  return new Date(+p[0], +p[1], 0).getDate();
+}
+function iconSvg(name, size){
+  var n = ICONS.indexOf(name) >= 0 ? name : 'sparkle';
+  var st = size ? ' style="width:' + size + 'px;height:' + size + 'px"' : '';
+  return '<svg class="gi"' + st + ' viewBox="0 0 48 48"><use href="#i-' + n + '"></use></svg>';
+}
+function catById(type, id){
+  var list = (DATA.categories && DATA.categories[type]) || [];
+  for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
+  return { id:id, name:'Без категории', icon:'sparkle', tint:'#B9A6FF' };
+}
+function dateLabel(s){
+  var t = todayISO();
+  if (s === t) return 'Сегодня';
+  if (daysBetween(s, t) === 1) return 'Вчера';
+  var d = parseISO(s);
+  return d.getDate() + ' ' + MONTHS[d.getMonth()];
+}
+function soonLabel(s){
+  var d = daysBetween(refToday(), s);
+  if (d < 0) return 'просрочено';
+  if (d === 0) return 'сегодня';
+  if (d === 1) return 'завтра';
+  if (d < 5) return 'через ' + d + ' ' + plural(d, 'день', 'дня', 'дней');
+  var dt = parseISO(s);
+  return dt.getDate() + ' ' + MONTHS[dt.getMonth()];
+}
+function esc(s){
+  return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){
+    return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c];
+  });
+}
+function toast(msg, undoFn){
+  $('toastTxt').textContent = msg;
+  var u = $('toastUndo');
+  u.classList.toggle('hidden', !undoFn);
+  u.onclick = undoFn ? function(){ undoFn(); hideToast(); } : null;
+  var el = $('toast'); el.classList.add('on');
+  clearTimeout(el._t); el._t = setTimeout(hideToast, undoFn ? 4200 : 1900);
+}
+function hideToast(){ $('toast').classList.remove('on'); }
+
+/* ---------- загрузка ---------- */
+function loadData(){
+  $('loading').classList.remove('hidden');
+  $('error').classList.add('hidden');
+  $('app').classList.add('hidden');
+  $('nav').classList.add('hidden');
+  fetch('data.json?v=' + Date.now(), { cache:'no-store' })
+    .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(function(json){
+      if (!json || !json.settings || !json.categories || !Array.isArray(json.transactions)) throw new Error('bad shape');
+      DATA = json;
+      TX = json.transactions.slice();
+      if (!Array.isArray(DATA.subscriptions)) DATA.subscriptions = [];
+      if (!Array.isArray(DATA.quickAdd)) DATA.quickAdd = [];
+      $('loading').classList.add('hidden');
+      $('app').classList.remove('hidden');
+      $('nav').classList.remove('hidden');
+      renderAll();
+    })
+    .catch(function(){
+      $('loading').classList.add('hidden');
+      $('error').classList.remove('hidden');
+    });
+}
+
+/* ---------- отрисовка ---------- */
+function renderAll(){
+  renderHeader(); renderTotals(); renderQuick();
+  renderWeek(); renderTops(); renderOps(); renderSubs();
+}
+function renderLive(){
+  renderHeader(); renderTotals(); renderWeek(); renderTops(); renderOps();
+}
+
+function renderHeader(){
+  var h = new Date().getHours();
+  $('greet').textContent = h < 5 ? 'Доброй ночи,' : h < 12 ? 'Доброе утро,' : h < 18 ? 'Добрый день,' : 'Добрый вечер,';
+  $('owner').textContent = DATA.settings.ownerName || 'Привет';
+
+  var s = streak();
+  $('streakTxt').textContent = s > 0
+    ? s + ' ' + plural(s, 'день', 'дня', 'дней') + ' подряд'
+    : 'начни серию';
+}
+/* сколько дней подряд есть записи */
+function streak(){
+  var days = {};
+  TX.forEach(function(t){ days[t.date] = 1; });
+  var start = parseISO(refToday());
+  if (!days[iso(start)]) start.setDate(start.getDate() - 1);
+  var n = 0;
+  while (days[iso(start)]) { n++; start.setDate(start.getDate() - 1); }
+  return n;
+}
+function monthTx(){
+  var m = refMonth();
+  return TX.filter(function(t){ return String(t.date || '').slice(0, 7) === m; });
+}
+
+function renderTotals(){
+  var m = refMonth(), p = m.split('-');
+  $('monthLbl').textContent = MONTHS_NOM[(+p[1]) - 1] + ' ' + p[0];
+
+  var inc = 0, exp = 0;
+  monthTx().forEach(function(t){
+    var a = Number(t.amount) || 0;
+    if (t.type === 'income') inc += a; else exp += a;
+  });
+  var budget = Number(DATA.settings.monthlyBudget) || 0;
+  var left = budget - exp;
+
+  $('balance').textContent = money(left);
+  $('incomeVal').textContent = money(inc);
+  $('expenseVal').textContent = money(exp);
+  $('budgetSub').textContent = budget ? 'из ' + money(budget) + ' бюджета' : 'потрачено ' + money(exp);
+
+  var pct = budget > 0 ? Math.min(100, Math.round(exp / budget * 100)) : 0;
+  $('ringPct').textContent = pct + '%';
+  $('barFill').style.width = pct + '%';
+  var C = 2 * Math.PI * 36;
+  $('ringArc').setAttribute('stroke-dashoffset', String(C - C * pct / 100));
+
+  var dayNo = +refToday().slice(8);
+  var daysLeft = Math.max(1, daysInMonth(m) - dayNo + 1);
+  $('dailyVal').textContent = money(Math.max(0, left) / daysLeft);
+  $('dailyNote').textContent = 'ещё ' + daysLeft + ' ' + plural(daysLeft, 'день', 'дня', 'дней') + ' в месяце';
+}
+
+function renderQuick(){
+  var q = DATA.quickAdd || [];
+  if (!q.length) { $('quickRow').innerHTML = ''; return; }
+  $('quickRow').innerHTML = q.map(function(x, i){
+    var c = catById(x.type || 'expense', x.categoryId);
+    return '<button class="qbtn gt" data-q="' + i + '">' +
+      '<span class="ico sm gt" style="--tint:' + (c.tint || '#B9A6FF') + '">' + iconSvg(c.icon, 19) + '</span>' +
+      '<span class="qt">' + esc(x.label || c.name) + '<span class="qa">' + money(x.amount) + '</span></span>' +
+      '</button>';
+  }).join('');
+}
+
+function renderWeek(){
+  var end = parseISO(refToday()), cols = [], max = 0, sum = 0;
+  for (var i = 6; i >= 0; i--) {
+    var d = new Date(end); d.setDate(end.getDate() - i);
+    var key = iso(d), v = 0;
+    TX.forEach(function(t){ if (t.date === key && t.type !== 'income') v += Number(t.amount) || 0; });
+    if (v > max) max = v;
+    sum += v;
+    cols.push({ key:key, day:WD[d.getDay()], v:v, today:key === refToday() });
+  }
+  $('weekSum').textContent = money(sum);
+  $('weekAvg').textContent = 'в среднем ' + money(sum / 7) + ' в день';
+  $('chart').innerHTML = cols.map(function(c){
+    var h = max > 0 && c.v > 0 ? Math.round(10 + Math.pow(c.v / max, 0.55) * 68) : 8;
+    return '<div class="col' + (c.today ? ' today' : '') + '">' +
+      '<div class="colbar gt" style="height:' + h + 'px" title="' + money(c.v) + '"><i></i></div>' +
+      '<div class="d">' + c.day + '</div></div>';
+  }).join('');
+}
+
+function renderTops(){
+  var sums = {}, total = 0;
+  monthTx().forEach(function(t){
+    if (t.type === 'income') return;
+    var a = Number(t.amount) || 0;
+    sums[t.categoryId] = (sums[t.categoryId] || 0) + a;
+    total += a;
+  });
+  var rows = Object.keys(sums).map(function(k){ return { id:k, v:sums[k] }; })
+    .sort(function(a, b){ return b.v - a.v; }).slice(0, 3);
+
+  $('topCap').textContent = total ? 'всего ' + money(total) : '';
+  if (!rows.length) { $('topsList').innerHTML = '<div class="empty">Расходов в этом месяце ещё нет.</div>'; return; }
+
+  $('topsList').innerHTML = rows.map(function(r){
+    var c = catById('expense', r.id), share = total ? Math.round(r.v / total * 100) : 0;
+    return '<div class="trow">' +
+      '<div class="ico gt" style="--tint:' + (c.tint || '#B9A6FF') + '">' + iconSvg(c.icon) + '</div>' +
+      '<div class="tm">' +
+        '<div class="tn"><b>' + esc(c.name) + '</b><span>' + money(r.v) + '</span></div>' +
+        '<div class="tbar" style="--tint:' + (c.tint || '#8E7BFF') + '"><i style="width:' + share + '%"></i></div>' +
+        '<div class="tshare">' + share + '% всех трат месяца</div>' +
+      '</div></div>';
+  }).join('');
+}
+
+function renderOps(){
+  var list = TX.slice().sort(function(a, b){
+    if (a.date === b.date) return 0;
+    return a.date < b.date ? 1 : -1;
+  }).slice(0, 5);
+  $('opsCount').textContent = TX.length > 5 ? 'всего ' + TX.length : '';
+  if (!list.length) { $('opsList').innerHTML = '<div class="empty">Пока ни одной записи. Нажми «+», чтобы добавить первую.</div>'; return; }
+  $('opsList').innerHTML = list.map(function(t){
+    var c = catById(t.type, t.categoryId), isIn = t.type === 'income';
+    return '<div class="item">' +
+      '<div class="ico gt" style="--tint:' + (c.tint || '#B9A6FF') + '">' + iconSvg(c.icon) + '</div>' +
+      '<div class="mid"><div class="t">' + esc(c.name) + '</div>' +
+      '<div class="s">' + (t.comment ? esc(t.comment) + ' · ' : '') + dateLabel(t.date) + '</div></div>' +
+      '<div class="amt ' + (isIn ? 'in' : 'out') + '">' + (isIn ? '+' : '−') + ' ' + money(t.amount) + '</div>' +
+      '</div>';
+  }).join('');
+}
+
+function renderSubs(){
+  var subs = DATA.subscriptions.slice().sort(function(a, b){
+    return daysBetween(refToday(), a.nextPaymentDate) - daysBetween(refToday(), b.nextPaymentDate);
+  });
+  $('subsTotal').textContent = money(subs.reduce(function(s, x){ return s + (Number(x.amount) || 0); }, 0));
+  if (!subs.length) { $('subsList').innerHTML = '<div class="empty">Подписок пока нет.</div>'; return; }
+  $('subsList').innerHTML = subs.map(function(s){
+    return '<div class="item">' +
+      '<div class="ico gt" style="--tint:' + (s.tint || '#B9A6FF') + '">' + iconSvg(s.icon) + '</div>' +
+      '<div class="mid"><div class="t">' + esc(s.name) + '</div>' +
+      '<div class="s">списание ' + soonLabel(s.nextPaymentDate) + '</div></div>' +
+      '<div class="amt out">' + money(s.amount) + '</div>' +
+      '</div>';
+  }).join('');
+}
+
+/* ---------- запись ---------- */
+function addTx(t){
+  t.id = 'local_' + Date.now() + '_' + Math.round(Math.random() * 999);
+  TX.unshift(t);
+  lastAddedId = t.id;
+  renderLive();
+  return t.id;
+}
+function undoTx(id){
+  TX = TX.filter(function(t){ return t.id !== id; });
+  renderLive(); haptic('light');
+}
+
+/* ---------- форма ---------- */
+function openSheet(){
+  form.type = 'expense'; form.categoryId = null;
+  $('fAmount').value = ''; $('fComment').value = '';
+  $('fDate').value = refToday(); $('fCur').textContent = cur();
+  setType('expense');
+  $('scrim').classList.add('on'); $('sheet').classList.add('on');
+  haptic('light');
+  setTimeout(function(){ try { $('fAmount').focus(); } catch(e){} }, 300);
+}
+function closeSheet(){
+  $('scrim').classList.remove('on'); $('sheet').classList.remove('on');
+  try { document.activeElement.blur(); } catch(e){}
+}
+function setType(type){
+  form.type = type; form.categoryId = null;
+  $('segExpense').classList.toggle('on', type === 'expense');
+  $('segIncome').classList.toggle('on', type === 'income');
+  $('sheetTitle').textContent = type === 'expense' ? 'Новая трата' : 'Новый доход';
+  renderCats(); validate();
+}
+function renderCats(){
+  var list = DATA.categories[form.type] || [];
+  $('fCats').innerHTML = list.map(function(c){
+    return '<button class="chip gt' + (form.categoryId === c.id ? ' on' : '') + '" data-cat="' + c.id + '">' +
+      '<span class="ico sm gt" style="--tint:' + (c.tint || '#B9A6FF') + '">' + iconSvg(c.icon, 19) + '</span>' +
+      esc(c.name) + '</button>';
+  }).join('');
+}
+function validate(){
+  var a = parseFloat(String($('fAmount').value).replace(',', '.').replace(/\s/g, ''));
+  var ok = a > 0 && !!form.categoryId && !!$('fDate').value;
+  $('btnSave').disabled = !ok;
+  return ok;
+}
+function save(){
+  if (!validate()) return;
+  var a = parseFloat(String($('fAmount').value).replace(',', '.').replace(/\s/g, ''));
+  var id = addTx({ type:form.type, amount:a, categoryId:form.categoryId, date:$('fDate').value, comment:$('fComment').value.trim() });
+  closeSheet(); haptic('medium');
+  toast(form.type === 'expense' ? 'Трата записана' : 'Доход записан', function(){ undoTx(id); });
+}
+
+/* ---------- события ---------- */
+$('fab').addEventListener('click', openSheet);
+$('scrim').addEventListener('click', closeSheet);
+$('btnCancel').addEventListener('click', closeSheet);
+$('btnSave').addEventListener('click', save);
+$('segExpense').addEventListener('click', function(){ setType('expense'); });
+$('segIncome').addEventListener('click', function(){ setType('income'); });
+$('fCats').addEventListener('click', function(e){
+  var b = e.target.closest('[data-cat]'); if (!b) return;
+  form.categoryId = b.getAttribute('data-cat');
+  renderCats(); validate(); haptic('light');
+});
+$('quickRow').addEventListener('click', function(e){
+  var b = e.target.closest('[data-q]'); if (!b) return;
+  var x = DATA.quickAdd[+b.getAttribute('data-q')]; if (!x) return;
+  var id = addTx({ type:x.type || 'expense', amount:Number(x.amount) || 0, categoryId:x.categoryId, date:refToday(), comment:x.label || '' });
+  haptic('medium');
+  toast(esc(x.label) + ' · ' + money(x.amount), function(){ undoTx(id); });
+});
+$('fAmount').addEventListener('input', function(){ this.value = this.value.replace(/[^\d.,]/g, ''); validate(); });
+$('fComment').addEventListener('input', validate);
+$('fDate').addEventListener('change', validate);
+
+document.querySelectorAll('.tab').forEach(function(tab){
+  tab.addEventListener('click', function(){
+    if (tab.getAttribute('data-soon')) { toast('Этот раздел ещё в работе'); return; }
+    document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('on'); });
+    tab.classList.add('on');
+    var go = tab.getAttribute('data-go');
+    if (go === 'top') window.scrollTo({ top:0, behavior:'smooth' });
+    else { var el = $(go); if (el) el.scrollIntoView({ behavior:'smooth', block:'start' }); }
+  });
+});
+document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeSheet(); });
+
+loadData();
+</script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+{
+  "settings": {
+    "ownerName": "Сабина",
+    "currency": "₽",
+    "monthlyBudget": 140000,
+    "month": "2026-09"
+  },
+  "categories": {
+    "expense": [
+      {
+        "id": "food",
+        "name": "Продукты",
+        "icon": "food",
+        "tint": "#5BD6A0"
+      },
+      {
+        "id": "cafe",
+        "name": "Кафе",
+        "icon": "cafe",
+        "tint": "#FFB067"
+      },
+      {
+        "id": "transport",
+        "name": "Транспорт",
+        "icon": "transport",
+        "tint": "#8E7BFF"
+      },
+      {
+        "id": "home",
+        "name": "Дом",
+        "icon": "home",
+        "tint": "#C98BFF"
+      },
+      {
+        "id": "services",
+        "name": "Сервисы",
+        "icon": "services",
+        "tint": "#6FB3FF"
+      },
+      {
+        "id": "other",
+        "name": "Другое",
+        "icon": "sparkle",
+        "tint": "#B9A6FF"
+      }
+    ],
+    "income": [
+      {
+        "id": "client",
+        "name": "Клиент",
+        "icon": "briefcase",
+        "tint": "#4FD8C4"
+      },
+      {
+        "id": "consult",
+        "name": "Консультация",
+        "icon": "crystal",
+        "tint": "#D07BFF"
+      },
+      {
+        "id": "refund",
+        "name": "Возврат",
+        "icon": "refund",
+        "tint": "#6FC9FF"
+      },
+      {
+        "id": "other_in",
+        "name": "Другое",
+        "icon": "sparkle",
+        "tint": "#B9A6FF"
+      }
+    ]
+  },
+  "quickAdd": [
+    {
+      "id": "q1",
+      "label": "Кофе",
+      "amount": 350,
+      "type": "expense",
+      "categoryId": "cafe"
+    },
+    {
+      "id": "q2",
+      "label": "Продукты",
+      "amount": 2500,
+      "type": "expense",
+      "categoryId": "food"
+    },
+    {
+      "id": "q3",
+      "label": "Такси",
+      "amount": 700,
+      "type": "expense",
+      "categoryId": "transport"
+    },
+    {
+      "id": "q4",
+      "label": "Обед",
+      "amount": 900,
+      "type": "expense",
+      "categoryId": "cafe"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "t1",
+      "type": "income",
+      "amount": 65000,
+      "categoryId": "client",
+      "date": "2026-09-07",
+      "comment": "Сайт-визитка, вторая часть"
+    },
+    {
+      "id": "t2",
+      "type": "expense",
+      "amount": 4380,
+      "categoryId": "food",
+      "date": "2026-09-07",
+      "comment": "Вкусвилл"
+    },
+    {
+      "id": "t3",
+      "type": "expense",
+      "amount": 690,
+      "categoryId": "cafe",
+      "date": "2026-09-06",
+      "comment": "Кофе с Мариной"
+    },
+    {
+      "id": "t4",
+      "type": "expense",
+      "amount": 1240,
+      "categoryId": "transport",
+      "date": "2026-09-05",
+      "comment": "Такси до студии"
+    },
+    {
+      "id": "t5",
+      "type": "income",
+      "amount": 12000,
+      "categoryId": "consult",
+      "date": "2026-09-04",
+      "comment": "Разбор натальной карты"
+    },
+    {
+      "id": "t6",
+      "type": "expense",
+      "amount": 2790,
+      "categoryId": "services",
+      "date": "2026-09-04",
+      "comment": "Claude Pro"
+    },
+    {
+      "id": "t7",
+      "type": "expense",
+      "amount": 18500,
+      "categoryId": "home",
+      "date": "2026-09-03",
+      "comment": "Аренда, часть"
+    },
+    {
+      "id": "t8",
+      "type": "expense",
+      "amount": 3120,
+      "categoryId": "food",
+      "date": "2026-09-03",
+      "comment": "Продукты на неделю"
+    }
+  ],
+  "subscriptions": [
+    {
+      "id": "s1",
+      "name": "Интернет",
+      "amount": 800,
+      "nextPaymentDate": "2026-09-10",
+      "icon": "wifi",
+      "tint": "#6FB3FF"
+    },
+    {
+      "id": "s2",
+      "name": "Claude Pro",
+      "amount": 2790,
+      "nextPaymentDate": "2026-09-14",
+      "icon": "spark",
+      "tint": "#B98BFF"
+    },
+    {
+      "id": "s3",
+      "name": "Сервер Beget",
+      "amount": 1450,
+      "nextPaymentDate": "2026-09-19",
+      "icon": "server",
+      "tint": "#8E7BFF"
+    },
+    {
+      "id": "s4",
+      "name": "Телефон",
+      "amount": 650,
+      "nextPaymentDate": "2026-09-24",
+      "icon": "phone",
+      "tint": "#5BD6A0"
+    },
+    {
+      "id": "s5",
+      "name": "Хранилище",
+      "amount": 299,
+      "nextPaymentDate": "2026-09-30",
+      "icon": "cloud",
+      "tint": "#FFB067"
+    }
+  ]
+}
