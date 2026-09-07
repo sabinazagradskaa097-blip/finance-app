@@ -1,0 +1,173 @@
+{
+  "settings": {
+    "currency": "₽",
+    "monthlyBudget": 120000,
+    "currentMonth": "Сентябрь 2026"
+  },
+  "categories": {
+    "expense": [
+      {
+        "id": "food",
+        "name": "Продукты",
+        "icon": "🍎"
+      },
+      {
+        "id": "cafe",
+        "name": "Кафе",
+        "icon": "☕"
+      },
+      {
+        "id": "transport",
+        "name": "Транспорт",
+        "icon": "🚕"
+      },
+      {
+        "id": "entertainment",
+        "name": "Развлечения",
+        "icon": "🎮"
+      },
+      {
+        "id": "health",
+        "name": "Здоровье",
+        "icon": "💊"
+      },
+      {
+        "id": "shopping",
+        "name": "Покупки",
+        "icon": "🛍️"
+      },
+      {
+        "id": "housing",
+        "name": "Жильё",
+        "icon": "🏠"
+      },
+      {
+        "id": "other",
+        "name": "Другое",
+        "icon": "📦"
+      }
+    ],
+    "income": [
+      {
+        "id": "salary",
+        "name": "Зарплата",
+        "icon": "💰"
+      },
+      {
+        "id": "freelance",
+        "name": "Фриланс",
+        "icon": "💻"
+      },
+      {
+        "id": "gift",
+        "name": "Подарок",
+        "icon": "🎁"
+      },
+      {
+        "id": "refund",
+        "name": "Возврат",
+        "icon": "↩️"
+      },
+      {
+        "id": "investment",
+        "name": "Инвестиции",
+        "icon": "📈"
+      }
+    ]
+  },
+  "transactions": [
+    {
+      "id": "t1",
+      "type": "expense",
+      "amount": 2840,
+      "category": "food",
+      "comment": "Пятёрочка",
+      "date": "2026-09-06"
+    },
+    {
+      "id": "t2",
+      "type": "expense",
+      "amount": 1200,
+      "category": "cafe",
+      "comment": "Кофе с коллегами",
+      "date": "2026-09-05"
+    },
+    {
+      "id": "t3",
+      "type": "income",
+      "amount": 45000,
+      "category": "freelance",
+      "comment": "Оплата от клиента",
+      "date": "2026-09-04"
+    },
+    {
+      "id": "t4",
+      "type": "expense",
+      "amount": 890,
+      "category": "transport",
+      "comment": "Яндекс Go",
+      "date": "2026-09-04"
+    },
+    {
+      "id": "t5",
+      "type": "expense",
+      "amount": 5600,
+      "category": "shopping",
+      "comment": "Wildberries",
+      "date": "2026-09-03"
+    },
+    {
+      "id": "t6",
+      "type": "income",
+      "amount": 85000,
+      "category": "salary",
+      "comment": "Аванс",
+      "date": "2026-09-01"
+    },
+    {
+      "id": "t7",
+      "type": "expense",
+      "amount": 3200,
+      "category": "entertainment",
+      "comment": "Кино и ужин",
+      "date": "2026-09-02"
+    }
+  ],
+  "subscriptions": [
+    {
+      "id": "s1",
+      "name": "VPS-сервер",
+      "amount": 890,
+      "nextDate": "2026-09-10",
+      "icon": "🖥️"
+    },
+    {
+      "id": "s2",
+      "name": "Claude Pro",
+      "amount": 2000,
+      "nextDate": "2026-09-15",
+      "icon": "🤖"
+    },
+    {
+      "id": "s3",
+      "name": "Мобильный",
+      "amount": 650,
+      "nextDate": "2026-09-20",
+      "icon": "📱"
+    },
+    {
+      "id": "s4",
+      "name": "Интернет",
+      "amount": 750,
+      "nextDate": "2026-09-25",
+      "icon": "🌐"
+    },
+    {
+      "id": "s5",
+      "name": "Spotify",
+      "amount": 199,
+      "nextDate": "2026-09-12",
+      "icon": "🎵"
+    }
+  ]
+}
