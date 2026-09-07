@@ -463,6 +463,14 @@ button{border:0;background:none;cursor:pointer}
   -webkit-background-clip:text;background-clip:text;color:transparent}
 .ir .chev{margin-left:0;flex:0 0 18px;width:18px;height:18px}
 
+/* быстрая запись — одна кнопка */
+.addbtn{display:flex;align-items:center;gap:15px;padding:18px 22px;border-radius:var(--r-lg)}
+.addbtn .ico{flex:0 0 46px;height:46px}
+.ab-tx{flex:1;min-width:0;position:relative;z-index:3;display:flex;flex-direction:column;gap:3px}
+.ab-tx b{font-size:var(--fs-md);font-weight:700;color:var(--text)}
+.ab-tx small{font-size:var(--fs-sm);color:var(--muted)}
+.addbtn .chev{flex:0 0 18px;width:18px;height:18px;margin-left:0}
+
 /* строки в детальном шите */
 .dsub{text-align:center;color:var(--muted);font-size:var(--fs-sm);margin:-14px 0 22px}
 .drow{display:flex;align-items:center;gap:15px;padding:15px 6px;position:relative;z-index:3}
@@ -655,16 +663,6 @@ button{border:0;background:none;cursor:pointer}
       </div>
     </div>
     <div class="bar"><i id="barFill"></i></div>
-    <div class="daily gt">
-      <div style="min-width:0"><div class="k">Свободно на день</div><div class="sub" id="dailyNote" style="margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">—</div></div>
-      <div class="v" id="dailyVal">—</div>
-    </div>
-  </div>
-
-  <!-- быстрые траты -->
-  <div class="sec" style="margin-top:22px">
-    <div class="sec-h"><h2>Быстрая запись</h2><span class="side">один тап</span></div>
-    <div class="quick" id="quickRow"></div>
   </div>
 
   <!-- 2. доход / расход -->
@@ -686,20 +684,19 @@ button{border:0;background:none;cursor:pointer}
     <button class="glass invest tap" id="investCard"></button>
   </div>
 
+  <!-- быстрая запись -->
+  <div class="sec" id="secQuick" style="margin-top:var(--gap)">
+    <button class="glass addbtn tap" id="quickAddBtn">
+      <span class="ico gt" style="--tint:#7B5AE6"><svg class="mi" style="width:22px;height:22px;color:var(--violet-dk)"><use href="#m-plus"></use></svg></span>
+      <span class="ab-tx"><b>Записать операцию</b><small>доход или расход вручную</small></span>
+      <svg class="chev" viewBox="0 0 24 24"><use href="#m-chev"></use></svg>
+    </button>
+  </div>
+
   <!-- доход: дело vs найм -->
   <div class="sec" id="secSplit">
     <div class="sec-h"><h2>Доход: дело vs найм</h2><span class="side" id="splitCap"></span></div>
     <div class="glass split" id="splitCard"></div>
-  </div>
-
-  <!-- подушка + цель -->
-  <div class="sec" id="secSafety">
-    <div class="sec-h"><h2>Подушка безопасности</h2></div>
-    <div class="glass goalcard" id="goalCard" style="margin-bottom:var(--gap)"></div>
-    <div class="duo">
-      <div class="glass metric" id="runwayCard"></div>
-      <div class="glass metric" id="saveCard"></div>
-    </div>
   </div>
 
   <!-- неделя -->
@@ -930,13 +927,13 @@ function loadData(){
 
 /* ---------- отрисовка ---------- */
 function renderAll(){
-  renderHeader(); renderTotals(); renderInvest(); renderQuick();
-  renderSplit(); renderRunwayGoal(); renderDonut(); renderHeatmap();
+  renderHeader(); renderTotals(); renderInvest();
+  renderSplit(); renderDonut(); renderHeatmap();
   renderWeek(); renderTrend(); renderMiniStats(); renderTops(); renderOps(); renderSubs();
   renderInsights();
 }
 function renderLive(){
-  renderHeader(); renderTotals(); renderSplit(); renderRunwayGoal(); renderDonut(); renderHeatmap(); renderWeek(); renderTrend(); renderMiniStats(); renderTops(); renderOps(); renderInsights();
+  renderHeader(); renderTotals(); renderSplit(); renderDonut(); renderHeatmap(); renderWeek(); renderTrend(); renderMiniStats(); renderTops(); renderOps(); renderInsights();
 }
 
 function renderHeader(){
@@ -986,23 +983,6 @@ function renderTotals(){
   $('barFill').style.width = pct + '%';
   var C = 2 * Math.PI * 36;
   $('ringArc').setAttribute('stroke-dashoffset', String(C - C * pct / 100));
-
-  var dayNo = +refToday().slice(8);
-  var daysLeft = Math.max(1, daysInMonth(m) - dayNo + 1);
-  $('dailyVal').textContent = money(Math.max(0, left) / daysLeft);
-  $('dailyNote').textContent = 'ещё ' + daysLeft + ' ' + plural(daysLeft, 'день', 'дня', 'дней') + ' в месяце';
-}
-
-function renderQuick(){
-  var q = DATA.quickAdd || [];
-  if (!q.length) { $('quickRow').innerHTML = ''; return; }
-  $('quickRow').innerHTML = q.map(function(x, i){
-    var c = catById(x.type || 'expense', x.categoryId);
-    return '<button class="qbtn gt" data-q="' + i + '">' +
-      '<span class="ico sm gt" style="--tint:' + (c.tint || '#B9A6FF') + '">' + iconSvg(c.icon, 19) + '</span>' +
-      '<span class="qt">' + esc(x.label || c.name) + '<span class="qa">' + money(x.amount) + '</span></span>' +
-      '</button>';
-  }).join('');
 }
 
 function renderWeek(){
@@ -1153,13 +1133,7 @@ $('fCats').addEventListener('click', function(e){
   form.categoryId = b.getAttribute('data-cat');
   renderCats(); validate(); haptic('light');
 });
-$('quickRow').addEventListener('click', function(e){
-  var b = e.target.closest('[data-q]'); if (!b) return;
-  var x = DATA.quickAdd[+b.getAttribute('data-q')]; if (!x) return;
-  var id = addTx({ type:x.type || 'expense', amount:Number(x.amount) || 0, categoryId:x.categoryId, date:refToday(), comment:x.label || '' });
-  haptic('medium');
-  toast(esc(x.label) + ' · ' + money(x.amount), function(){ undoTx(id); });
-});
+$('quickAddBtn').addEventListener('click', openSheet);
 $('fAmount').addEventListener('input', function(){ this.value = this.value.replace(/[^\d.,]/g, ''); validate(); });
 $('fComment').addEventListener('input', validate);
 $('fDate').addEventListener('change', validate);
