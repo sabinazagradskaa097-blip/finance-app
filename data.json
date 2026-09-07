@@ -777,5 +777,23 @@
       "date": "2026-09-02",
       "comment": "Кофе"
     }
-  ]
+  ],
+  "investments": {
+    "accounts": [
+      {
+        "id": "inv_vtb",
+        "name": "ВТБ Инвестиции",
+        "amount": 85000,
+        "tint": "#5B93F0",
+        "icon": "crystal"
+      },
+      {
+        "id": "inv_tin",
+        "name": "Тинькофф Инвестиции",
+        "amount": 124000,
+        "tint": "#FFB067",
+        "icon": "spark"
+      }
+    ]
+  }
 }

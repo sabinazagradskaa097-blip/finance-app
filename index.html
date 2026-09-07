@@ -446,6 +446,41 @@ button{border:0;background:none;cursor:pointer}
 .mstat .cap{font-size:var(--fs-xs);text-transform:uppercase;letter-spacing:1.1px;color:var(--dim);font-weight:650}
 .mstat .v{font-size:var(--fs-xl);font-weight:800;letter-spacing:-.5px;margin-top:10px;color:var(--text);white-space:nowrap}
 .mstat .n{font-size:var(--fs-sm);color:var(--muted);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ================= v3: проваливание ================= */
+.tap{cursor:pointer;text-align:left;width:100%;transition:transform .13s ease}
+.tap:active{transform:scale(.985)}
+.stat.tap .row{display:flex;align-items:center;gap:11px}
+.chev{width:15px;height:15px;margin-left:auto;color:var(--dim);flex:0 0 15px;opacity:.7}
+
+/* инвестиции — плашка */
+.invest{padding:20px 22px;border-radius:var(--r-lg);display:block}
+.ir{display:flex;align-items:center;gap:15px;position:relative;z-index:3}
+.im{flex:1;min-width:0}
+.il{font-size:var(--fs-sm);color:var(--muted);font-weight:600}
+.iv{font-size:var(--fs-xl);font-weight:800;letter-spacing:-.6px;margin-top:5px;white-space:nowrap;
+  background:linear-gradient(115deg,#3F6FE0 0%,#7B5AE6 55%,#E86FC7 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.ir .chev{margin-left:0;flex:0 0 18px;width:18px;height:18px}
+
+/* строки в детальном шите */
+.dsub{text-align:center;color:var(--muted);font-size:var(--fs-sm);margin:-14px 0 22px}
+.drow{display:flex;align-items:center;gap:15px;padding:15px 6px;position:relative;z-index:3}
+.drow+.drow{border-top:1px solid rgba(74,54,128,.10)}
+.drow .dm{flex:1;min-width:0}
+.drow .dn{display:flex;align-items:baseline;gap:9px}
+.drow .dn b{font-weight:650;font-size:var(--fs-md);color:var(--text)}
+.drow .dn .damt{margin-left:auto;font-weight:700;white-space:nowrap;color:var(--text)}
+.drow .dn .damt.in{color:var(--up)}
+.srcbadge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:3px 8px;border-radius:99px;
+  color:var(--violet-dk);background:rgba(123,90,230,.12)}
+.dtot{display:flex;align-items:center;justify-content:space-between;margin-top:18px;padding:18px 20px;border-radius:var(--r-md);
+  background:rgba(74,54,128,.06);box-shadow:inset 0 1.5px 3px rgba(74,54,128,.10)}
+.dtot span{color:var(--muted);font-weight:600}
+.dtot b{font-size:var(--fs-lg);font-weight:800;letter-spacing:-.4px;color:var(--violet-dk)}
+.dempty{padding:34px 16px;text-align:center;color:var(--dim);font-size:var(--fs-sm)}
+.hcell{cursor:pointer}
+.hcell.empty{cursor:default}
 </style>
 </head>
 <body>
@@ -576,6 +611,7 @@ button{border:0;background:none;cursor:pointer}
 <symbol id="m-plus" viewBox="0 0 24 24"><path d="M12 4.5v15M4.5 12h15" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></symbol>
 <symbol id="m-down" viewBox="0 0 24 24"><path d="M12 5v13m0 0 5.2-5.2M12 18l-5.2-5.2" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
 <symbol id="m-up" viewBox="0 0 24 24"><path d="M12 19V6m0 0 5.2 5.2M12 6 6.8 11.2" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+<symbol id="m-chev" viewBox="0 0 24 24"><path d="M9 5.5 15.5 12 9 18.5" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </svg>
 
 <div id="loading" class="state"><div class="spin"></div></div>
@@ -625,30 +661,29 @@ button{border:0;background:none;cursor:pointer}
     </div>
   </div>
 
-  <!-- инсайты -->
-  <div class="sec" id="secInsights" style="margin-top:26px">
-    <div class="sec-h"><h2>Коротко о деньгах</h2></div>
-    <div id="insList"></div>
-  </div>
-
   <!-- быстрые траты -->
   <div class="sec" style="margin-top:22px">
     <div class="sec-h"><h2>Быстрая запись</h2><span class="side">один тап</span></div>
     <div class="quick" id="quickRow"></div>
   </div>
 
-  <!-- 2. пришло / ушло -->
+  <!-- 2. доход / расход -->
   <div class="sec">
     <div class="stats">
-      <div class="glass stat">
-        <div class="row"><span class="dot in gt"><svg class="mi" style="width:16px;height:16px"><use href="#m-down"></use></svg></span> Пришло</div>
+      <button class="glass stat tap" data-detail="income">
+        <div class="row"><span class="dot in gt"><svg class="mi" style="width:16px;height:16px"><use href="#m-down"></use></svg></span> Доход <svg class="chev" viewBox="0 0 24 24"><use href="#m-chev"></use></svg></div>
         <div class="val in" id="incomeVal">—</div>
-      </div>
-      <div class="glass stat">
-        <div class="row"><span class="dot out gt"><svg class="mi" style="width:16px;height:16px"><use href="#m-up"></use></svg></span> Ушло</div>
+      </button>
+      <button class="glass stat tap" data-detail="expense">
+        <div class="row"><span class="dot out gt"><svg class="mi" style="width:16px;height:16px"><use href="#m-up"></use></svg></span> Расход <svg class="chev" viewBox="0 0 24 24"><use href="#m-chev"></use></svg></div>
         <div class="val out" id="expenseVal">—</div>
-      </div>
+      </button>
     </div>
+  </div>
+
+  <!-- инвестиции -->
+  <div class="sec hidden" id="secInvest" style="margin-top:var(--gap)">
+    <button class="glass invest tap" id="investCard"></button>
   </div>
 
   <!-- доход: дело vs найм -->
@@ -713,6 +748,12 @@ button{border:0;background:none;cursor:pointer}
     <div class="glass subs-total"><span>Всего в месяц на подписки</span> <b id="subsTotal">—</b></div>
     <div class="glass list" id="subsList"></div>
   </div>
+
+  <!-- инсайты (в самом низу) -->
+  <div class="sec" id="secInsights">
+    <div class="sec-h"><h2>Коротко о деньгах</h2></div>
+    <div id="insList"></div>
+  </div>
 </div>
 
 <nav class="nav hidden" id="nav">
@@ -747,6 +788,15 @@ button{border:0;background:none;cursor:pointer}
     <button class="btn ghost gt" id="btnCancel">Отмена</button>
     <button class="btn main" id="btnSave">Сохранить</button>
   </div>
+</div>
+
+<div class="scrim" id="dScrim"></div>
+<div class="sheet" id="dSheet" role="dialog" aria-modal="true">
+  <div class="grab"></div>
+  <h3 id="dTitle">—</h3>
+  <div class="dsub" id="dSub"></div>
+  <div id="dBody"></div>
+  <div class="acts" style="grid-template-columns:1fr;margin-top:22px"><button class="btn ghost gt" id="dClose">Закрыть</button></div>
 </div>
 
 <div class="toast" id="toast"><span id="toastTxt"></span><button class="undo hidden" id="toastUndo">Отменить</button></div>
@@ -880,12 +930,13 @@ function loadData(){
 
 /* ---------- отрисовка ---------- */
 function renderAll(){
-  renderHeader(); renderTotals(); renderQuick();
-  renderInsights(); renderSplit(); renderRunwayGoal(); renderDonut(); renderHeatmap();
+  renderHeader(); renderTotals(); renderInvest(); renderQuick();
+  renderSplit(); renderRunwayGoal(); renderDonut(); renderHeatmap();
   renderWeek(); renderTrend(); renderMiniStats(); renderTops(); renderOps(); renderSubs();
+  renderInsights();
 }
 function renderLive(){
-  renderHeader(); renderTotals(); renderInsights(); renderSplit(); renderRunwayGoal(); renderDonut(); renderHeatmap(); renderWeek(); renderTrend(); renderMiniStats(); renderTops(); renderOps();
+  renderHeader(); renderTotals(); renderSplit(); renderRunwayGoal(); renderDonut(); renderHeatmap(); renderWeek(); renderTrend(); renderMiniStats(); renderTops(); renderOps(); renderInsights();
 }
 
 function renderHeader(){
@@ -1123,7 +1174,7 @@ document.querySelectorAll('.tab').forEach(function(tab){
     else { var el = $(go); if (el) el.scrollIntoView({ behavior:'smooth', block:'start' }); }
   });
 });
-document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeSheet(); });
+document.addEventListener('keydown', function(e){ if (e.key === 'Escape') { closeSheet(); closeDetail(); } });
 
 /* ---------- v2 дашборд ---------- */
 function sumAccounts(){ var a=(DATA.accounts||[]),s=0; for(var i=0;i<a.length;i++) s+=Number(a[i].balance)||0; return s; }
@@ -1208,10 +1259,11 @@ function renderHeatmap(){
   for(var d=1;d<=dim;d++){
     var v=per[d]||0, ratio=max>0?v/max:0, a=v>0?(0.12+0.62*Math.pow(ratio,0.7)):0;
     var bg=v>0?'background:rgba(123,90,230,'+a.toFixed(2)+')':'';
-    cells+='<div class="hcell'+(d===todayD?' now':'')+'" '+(bg?'style="'+bg+'"':'')+' title="'+money(v)+'"><small>'+d+'</small></div>';
+    var key=y+'-'+pad(mo)+'-'+pad(d);
+    cells+='<div class="hcell'+(d===todayD?' now':'')+'" data-day="'+key+'" '+(bg?'style="'+bg+'"':'')+' title="'+money(v)+'"><small>'+d+'</small></div>';
   }
   grid.innerHTML=cells;
-  $('heatCap').textContent=max>0?'ярче — больше трат':'';
+  $('heatCap').textContent=max>0?'тап по дню — детали':'';
 }
 
 function renderTrend(){
@@ -1249,6 +1301,100 @@ function renderMiniStats(){
   $('badges').innerHTML=badges.map(function(b){ return '<span class="badge">'+b+'</span>'; }).join('');
 }
 
+/* ---------- v3: инвестиции ---------- */
+function investList(){ return (DATA.investments && DATA.investments.accounts) || []; }
+function investTotal(){ return investList().reduce(function(s,x){ return s + (Number(x.amount)||0); }, 0); }
+function renderInvest(){
+  var card=$('investCard'), sec=$('secInvest'); if(!card||!sec) return;
+  var list=investList();
+  if(!list.length){ sec.classList.add('hidden'); return; }
+  sec.classList.remove('hidden');
+  card.innerHTML='<div class="ir">'+
+    '<div class="ico gt" style="--tint:#7B5AE6">'+iconSvg('crystal')+'</div>'+
+    '<div class="im"><div class="il">Всего в инвестициях</div><div class="iv">'+money(investTotal())+'</div></div>'+
+    '<svg class="chev" viewBox="0 0 24 24"><use href="#m-chev"></use></svg></div>';
+}
+
+/* ---------- v3: детальный шит ---------- */
+function openDetail(title, sub, html){
+  $('dTitle').textContent=title;
+  $('dSub').textContent=sub||'';
+  $('dSub').style.display=sub?'block':'none';
+  $('dBody').innerHTML=html;
+  $('dScrim').classList.add('on'); $('dSheet').classList.add('on'); haptic('light');
+}
+function closeDetail(){ $('dScrim').classList.remove('on'); $('dSheet').classList.remove('on'); }
+$('dScrim').addEventListener('click', closeDetail);
+$('dClose').addEventListener('click', closeDetail);
+
+function detailRow(icon, tint, name, badge, amount, share, isIn){
+  return '<div class="drow">'+
+    '<div class="ico gt" style="--tint:'+(tint||'#B9A6FF')+'">'+iconSvg(icon)+'</div>'+
+    '<div class="dm"><div class="dn"><b>'+esc(name)+'</b>'+(badge||'')+
+      '<span class="damt'+(isIn?' in':'')+'">'+(isIn?'+ ':'')+money(amount)+'</span></div>'+
+      '<div class="tbar" style="--tint:'+(tint||'#7B5AE6')+'"><i style="width:'+share+'%"></i></div>'+
+      '<div class="tshare">'+share+'% этого месяца</div></div></div>';
+}
+function catBreakdown(type){
+  var sums={}, total=0;
+  monthTx().forEach(function(t){ if(t.type===type){ var a=Number(t.amount)||0; sums[t.categoryId]=(sums[t.categoryId]||0)+a; total+=a; } });
+  var rows=Object.keys(sums).map(function(k){ return {id:k,v:sums[k]}; }).sort(function(a,b){ return b.v-a.v; });
+  if(!total) return '<div class="dempty">В этом месяце пока пусто.</div>';
+  var html=rows.map(function(r){
+    var c=catById(type,r.id), p=Math.round(r.v/total*100);
+    var badge=(type==='income'&&c.source)?'<span class="srcbadge">'+(c.source==='job'?'найм':'дело')+'</span>':'';
+    return detailRow(c.icon,c.tint,c.name,badge,r.v,p,type==='income');
+  }).join('');
+  return html+'<div class="dtot"><span>Итого '+(type==='income'?'дохода':'расхода')+'</span><b>'+money(total)+'</b></div>';
+}
+function showCatDetail(type){
+  var m=refMonth().split('-');
+  var sub=MONTHS_NOM[(+m[1])-1]+' '+m[0];
+  openDetail(type==='income'?'Откуда пришло':'Куда ушло', sub, catBreakdown(type));
+}
+function showInvestDetail(){
+  var list=investList(), tot=investTotal();
+  if(!list.length) return;
+  var html=list.slice().sort(function(a,b){ return (Number(b.amount)||0)-(Number(a.amount)||0); }).map(function(x){
+    var p=tot?Math.round((Number(x.amount)||0)/tot*100):0;
+    return detailRow(x.icon||'crystal', x.tint, x.name, '', Number(x.amount)||0, p, false);
+  }).join('');
+  html+='<div class="dtot"><span>Всего в инвестициях</span><b>'+money(tot)+'</b></div>';
+  openDetail('Инвестиции','по счетам', html);
+}
+function showDayDetail(key){
+  var items=TX.filter(function(t){ return t.date===key; })
+    .sort(function(a,b){ return (Number(b.amount)||0)-(Number(a.amount)||0); });
+  if(!items.length){ openDetail(dayTitle(key),'', '<div class="dempty">В этот день трат не было.</div>'); return; }
+  var exp=0, inc=0;
+  var html=items.map(function(t){
+    var c=catById(t.type,t.categoryId), isIn=t.type==='income';
+    if(isIn) inc+=Number(t.amount)||0; else exp+=Number(t.amount)||0;
+    var what=t.comment?esc(t.comment):esc(c.name);
+    return '<div class="drow">'+
+      '<div class="ico gt" style="--tint:'+(c.tint||'#B9A6FF')+'">'+iconSvg(c.icon)+'</div>'+
+      '<div class="dm"><div class="dn"><b>'+what+'</b>'+
+        '<span class="damt'+(isIn?' in':'')+'">'+(isIn?'+ ':'− ')+money(t.amount)+'</span></div>'+
+        '<div class="tshare">'+esc(c.name)+'</div></div></div>';
+  }).join('');
+  html+='<div class="dtot"><span>Итого за день</span><b>'+money(exp)+'</b></div>';
+  var sub=inc>0?('доход в этот день +'+money(inc)):'';
+  openDetail(dayTitle(key), sub, html);
+}
+function dayTitle(key){
+  var d=parseISO(key);
+  return d.getDate()+' '+MONTHS[d.getMonth()];
+}
+
+document.querySelector('.stats').addEventListener('click', function(e){
+  var b=e.target.closest('[data-detail]'); if(!b) return;
+  showCatDetail(b.getAttribute('data-detail')); haptic('light');
+});
+$('investCard').addEventListener('click', function(){ showInvestDetail(); });
+$('heatGrid').addEventListener('click', function(e){
+  var c=e.target.closest('.hcell[data-day]'); if(!c) return;
+  showDayDetail(c.getAttribute('data-day')); haptic('light');
+});
 
 loadData();
 </script>
