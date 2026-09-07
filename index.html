@@ -679,6 +679,11 @@ button{border:0;background:none;cursor:pointer}
     </div>
   </div>
 
+  <!-- регулярные платежи -->
+  <div class="sec" id="secSubs" style="margin-top:var(--gap)">
+    <button class="glass invest tap" id="subsCard"></button>
+  </div>
+
   <!-- инвестиции -->
   <div class="sec hidden" id="secInvest" style="margin-top:var(--gap)">
     <button class="glass invest tap" id="investCard"></button>
@@ -708,17 +713,17 @@ button{border:0;background:none;cursor:pointer}
     </div>
   </div>
 
+  <!-- календарь месяца -->
+  <div class="sec" id="secHeat">
+    <div class="sec-h"><h2>Календарь месяца</h2><span class="side" id="heatCap"></span></div>
+    <div class="glass heat"><div class="heatwd" id="heatWd"></div><div class="heatgrid" id="heatGrid"></div></div>
+  </div>
+
   <!-- топ категорий -->
   <div class="sec" id="secTop">
     <div class="sec-h"><h2>Куда уходит</h2><span class="side" id="topCap"></span></div>
     <div class="glass donutWrap"><div class="donut" id="donut"></div><div class="legend" id="donutLeg"></div></div>
     <div class="glass tops" id="topsList"></div>
-  </div>
-
-  <!-- календарь месяца -->
-  <div class="sec" id="secHeat">
-    <div class="sec-h"><h2>Календарь месяца</h2><span class="side" id="heatCap"></span></div>
-    <div class="glass heat"><div class="heatwd" id="heatWd"></div><div class="heatgrid" id="heatGrid"></div></div>
   </div>
 
   <!-- динамика -->
@@ -739,13 +744,6 @@ button{border:0;background:none;cursor:pointer}
     <div class="glass list" id="opsList"></div>
   </div>
 
-  <!-- подписки -->
-  <div class="sec" id="secSubs">
-    <div class="sec-h"><h2>Ближайшие списания</h2></div>
-    <div class="glass subs-total"><span>Всего в месяц на подписки</span> <b id="subsTotal">—</b></div>
-    <div class="glass list" id="subsList"></div>
-  </div>
-
   <!-- инсайты (в самом низу) -->
   <div class="sec" id="secInsights">
     <div class="sec-h"><h2>Коротко о деньгах</h2></div>
@@ -758,7 +756,7 @@ button{border:0;background:none;cursor:pointer}
     <button class="tab on" data-go="top"><svg class="mi"><use href="#m-home"></use></svg>Главная</button>
     <button class="tab" data-go="secWeek"><svg class="mi"><use href="#m-chart"></use></svg>Аналитика</button>
     <button class="fab" id="fab" aria-label="Добавить"><svg class="mi"><use href="#m-plus"></use></svg></button>
-    <button class="tab" data-go="secSubs"><svg class="mi"><use href="#m-calendar"></use></svg>Подписки</button>
+    <button class="tab" data-go="secSubs"><svg class="mi"><use href="#m-calendar"></use></svg>Платежи</button>
     <button class="tab" data-soon="1"><svg class="mi"><use href="#m-user"></use></svg>Профиль</button>
   </div>
 </nav>
@@ -1049,20 +1047,49 @@ function renderOps(){
   }).join('');
 }
 
-function renderSubs(){
-  var subs = DATA.subscriptions.slice().sort(function(a, b){
+/* дата списания: точное число + понятная подсказка «завтра / через N дней» */
+function subWhen(d){
+  var rel = soonLabel(d), exact = dayTitle(d);
+  return rel === exact ? exact : (exact + ' · ' + rel);
+}
+function subsSorted(){
+  return DATA.subscriptions.slice().sort(function(a, b){
     return daysBetween(refToday(), a.nextPaymentDate) - daysBetween(refToday(), b.nextPaymentDate);
   });
-  $('subsTotal').textContent = money(subs.reduce(function(s, x){ return s + (Number(x.amount) || 0); }, 0));
-  if (!subs.length) { $('subsList').innerHTML = '<div class="empty">Подписок пока нет.</div>'; return; }
-  $('subsList').innerHTML = subs.map(function(s){
-    return '<div class="item">' +
+}
+function subsTotal(){
+  return DATA.subscriptions.reduce(function(s, x){ return s + (Number(x.amount) || 0); }, 0);
+}
+/* компактная плашка под доходом/расходом — тап открывает список */
+function renderSubs(){
+  var card = $('subsCard'), sec = $('secSubs'); if (!card || !sec) return;
+  var subs = subsSorted();
+  if (!subs.length) { sec.classList.add('hidden'); return; }
+  sec.classList.remove('hidden');
+  var nx = subs[0];
+  card.innerHTML = '<div class="ir">' +
+    '<div class="ico gt" style="--tint:#7B5AE6">' + iconSvg('refund') + '</div>' +
+    '<div class="im">' +
+      '<div class="il">Регулярные платежи</div>' +
+      '<div class="iv">' + money(subsTotal()) +
+        '<span style="font-size:13px;font-weight:650;color:var(--dim);-webkit-text-fill-color:var(--dim)"> / мес</span></div>' +
+      '<div style="font-size:var(--fs-sm);color:var(--muted);margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' +
+        'ближайшее — ' + esc(nx.name) + ', ' + subWhen(nx.nextPaymentDate) + '</div>' +
+    '</div>' +
+    '<svg class="chev" viewBox="0 0 24 24"><use href="#m-chev"></use></svg></div>';
+}
+/* детальный лист: какие подписки и оплаты, с числами */
+function showSubsDetail(){
+  var subs = subsSorted(); if (!subs.length) return;
+  var html = subs.map(function(s){
+    return '<div class="drow">' +
       '<div class="ico gt" style="--tint:' + (s.tint || '#B9A6FF') + '">' + iconSvg(s.icon) + '</div>' +
-      '<div class="mid"><div class="t">' + esc(s.name) + '</div>' +
-      '<div class="s">списание ' + soonLabel(s.nextPaymentDate) + '</div></div>' +
-      '<div class="amt out">' + money(s.amount) + '</div>' +
-      '</div>';
+      '<div class="dm"><div class="dn"><b>' + esc(s.name) + '</b>' +
+        '<span class="damt">' + money(s.amount) + '</span></div>' +
+        '<div class="tshare">списание ' + subWhen(s.nextPaymentDate) + '</div></div></div>';
   }).join('');
+  html += '<div class="dtot"><span>Всего в месяц</span><b>' + money(subsTotal()) + '</b></div>';
+  openDetail('Регулярные платежи', 'подписки и оплаты по датам', html);
 }
 
 /* ---------- запись ---------- */
@@ -1365,6 +1392,7 @@ document.querySelector('.stats').addEventListener('click', function(e){
   showCatDetail(b.getAttribute('data-detail')); haptic('light');
 });
 $('investCard').addEventListener('click', function(){ showInvestDetail(); });
+$('subsCard').addEventListener('click', function(){ showSubsDetail(); haptic('light'); });
 $('heatGrid').addEventListener('click', function(e){
   var c=e.target.closest('.hcell[data-day]'); if(!c) return;
   showDayDetail(c.getAttribute('data-day')); haptic('light');
