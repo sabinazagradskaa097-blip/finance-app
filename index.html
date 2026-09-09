@@ -980,16 +980,16 @@ function renderTotals(){
   var budget = Number(DATA.settings.monthlyBudget) || 0;
   var left = budget - exp;
 
-  $('balance').textContent = money(left);
+  // Главная плашка = деньги на дебетовых картах (по тапу — разбивка по банкам)
+  $('monthLbl').textContent = 'Деньги на картах';
+  $('balance').textContent = money(sumAccounts());
+  $('budgetSub').textContent = 'нажми, чтобы посмотреть по банкам';
   $('incomeVal').textContent = money(inc);
   $('expenseVal').textContent = money(exp);
-  $('budgetSub').textContent = budget ? 'из ' + money(budget) + ' бюджета' : 'потрачено ' + money(exp);
-
-  var pct = budget > 0 ? Math.min(100, Math.round(exp / budget * 100)) : 0;
-  $('ringPct').textContent = pct + '%';
-  $('barFill').style.width = pct + '%';
-  var C = 2 * Math.PI * 36;
-  $('ringArc').setAttribute('stroke-dashoffset', String(C - C * pct / 100));
+  // бюджетное кольцо/полоса на этой плашке не показываем — она про остаток на картах
+  var _ring = document.querySelector('.hero .ring'); if (_ring) _ring.style.display = 'none';
+  var _bar = document.querySelector('.hero .bar'); if (_bar) _bar.style.display = 'none';
+  var _hero = document.querySelector('.hero'); if (_hero) _hero.style.cursor = 'pointer';
 }
 
 function renderWeek(){
@@ -1101,6 +1101,29 @@ function showSubsDetail(){
   openDetail('Регулярные платежи', 'подписки и оплаты по датам', html);
 }
 
+/* разбивка денег по банкам/счетам (тап по главной плашке) */
+function bankIcon(name){
+  var n = (name || '').toLowerCase();
+  if (n.indexOf('яндекс') >= 0) return 'spark';
+  if (n.indexOf('тинь') >= 0 || n.indexOf('black') >= 0) return 'crystal';
+  if (n.indexOf('втб') >= 0) return 'doc';
+  if (n.indexOf('наличн') >= 0) return 'briefcase';
+  return 'sparkle';
+}
+function showAccountsDetail(){
+  var acc = (DATA.accounts || []).slice().sort(function(a, b){ return (Number(b.balance)||0) - (Number(a.balance)||0); });
+  if (!acc.length) return;
+  var tints = ['#6FB3FF','#FFB067','#8E7BFF','#5BD6A0','#D07BFF','#B98BFF'];
+  var html = acc.map(function(a, i){
+    return '<div class="drow">' +
+      '<div class="ico gt" style="--tint:' + tints[i % tints.length] + '">' + iconSvg(bankIcon(a.name)) + '</div>' +
+      '<div class="dm"><div class="dn"><b>' + esc(a.name) + '</b>' +
+        '<span class="damt">' + money(a.balance) + '</span></div></div></div>';
+  }).join('');
+  html += '<div class="dtot"><span>Всего на картах</span><b>' + money(sumAccounts()) + '</b></div>';
+  openDetail('Деньги на картах', 'по счетам и банкам', html);
+}
+
 /* ---------- запись ---------- */
 function addTx(t){
   t.id = 'local_' + Date.now() + '_' + Math.round(Math.random() * 999);
@@ -1158,6 +1181,7 @@ function save(){
 }
 
 /* ---------- события ---------- */
+(function(){ var h = document.querySelector('.hero'); if (h) h.addEventListener('click', showAccountsDetail); })();
 $('fab').addEventListener('click', openSheet);
 $('scrim').addEventListener('click', closeSheet);
 $('btnCancel').addEventListener('click', closeSheet);
