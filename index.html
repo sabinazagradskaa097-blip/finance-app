@@ -904,23 +904,32 @@ function loadData(){
   $('error').classList.add('hidden');
   $('app').classList.add('hidden');
   $('nav').classList.add('hidden');
-  fetch('data.json?v=' + Date.now(), { cache:'no-store' })
+  // Приватные данные: в Telegram грузим свои реальные цифры с сервера по initData
+  // (только владелец). Вне Telegram или при сбое — демо-data.json как запасной.
+  var PRIVATE = 'https://sabinadigital.ru/finance-data';
+  var initData = (TG && TG.initData) ? TG.initData : '';
+  var primary = initData ? (PRIVATE + '?initData=' + encodeURIComponent(initData)) : ('data.json?v=' + Date.now());
+  function apply(json){
+    if (!json || !json.settings || !json.categories || !Array.isArray(json.transactions)) throw new Error('bad shape');
+    DATA = json;
+    TX = json.transactions.slice();
+    if (!Array.isArray(DATA.subscriptions)) DATA.subscriptions = [];
+    if (!Array.isArray(DATA.quickAdd)) DATA.quickAdd = [];
+    $('loading').classList.add('hidden');
+    $('app').classList.remove('hidden');
+    $('nav').classList.remove('hidden');
+    renderAll();
+  }
+  function loadDemo(){
+    fetch('data.json?v=' + Date.now(), { cache:'no-store' })
+      .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(apply)
+      .catch(function(){ $('loading').classList.add('hidden'); $('error').classList.remove('hidden'); });
+  }
+  fetch(primary, { cache:'no-store' })
     .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-    .then(function(json){
-      if (!json || !json.settings || !json.categories || !Array.isArray(json.transactions)) throw new Error('bad shape');
-      DATA = json;
-      TX = json.transactions.slice();
-      if (!Array.isArray(DATA.subscriptions)) DATA.subscriptions = [];
-      if (!Array.isArray(DATA.quickAdd)) DATA.quickAdd = [];
-      $('loading').classList.add('hidden');
-      $('app').classList.remove('hidden');
-      $('nav').classList.remove('hidden');
-      renderAll();
-    })
-    .catch(function(){
-      $('loading').classList.add('hidden');
-      $('error').classList.remove('hidden');
-    });
+    .then(apply)
+    .catch(function(){ loadDemo(); });
 }
 
 /* ---------- отрисовка ---------- */
