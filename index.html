@@ -1028,7 +1028,7 @@ function renderTops(){
 
   $('topsList').innerHTML = rows.map(function(r){
     var c = catById('expense', r.id), share = total ? Math.round(r.v / total * 100) : 0;
-    return '<div class="trow">' +
+    return '<div class="trow" data-cat="' + esc(r.id) + '" style="cursor:pointer">' +
       '<div class="ico gt" style="--tint:' + (c.tint || '#B9A6FF') + '">' + iconSvg(c.icon) + '</div>' +
       '<div class="tm">' +
         '<div class="tn"><b>' + esc(c.name) + '</b><span>' + money(r.v) + '</span></div>' +
@@ -1125,6 +1125,26 @@ function showAccountsDetail(){
   openDetail('Деньги на картах', 'по счетам и банкам', html);
 }
 
+/* разбивка трат по категории (тап по строке в «Куда уходит») */
+function showCategoryDetail(catId){
+  var c = catById('expense', catId);
+  var txs = monthExpTx().filter(function(t){ return t.categoryId === catId; })
+            .sort(function(a, b){ return (Number(b.amount)||0) - (Number(a.amount)||0); });
+  if (!txs.length) return;
+  var tot = txs.reduce(function(s, t){ return s + (Number(t.amount)||0); }, 0);
+  var html = txs.map(function(t){
+    var when = (t.date && t.date.length >= 10) ? (t.date.slice(8) + '.' + t.date.slice(5,7)) : '';
+    var name = (t.comment && String(t.comment).trim()) ? t.comment : c.name;
+    return '<div class="drow">' +
+      '<div class="ico gt" style="--tint:' + (c.tint || '#B9A6FF') + '">' + iconSvg(c.icon) + '</div>' +
+      '<div class="dm"><div class="dn"><b>' + esc(name) + '</b>' +
+        '<span class="damt">' + money(t.amount) + '</span></div>' +
+        '<div class="tshare">' + when + '</div></div></div>';
+  }).join('');
+  html += '<div class="dtot"><span>Всего · ' + esc(c.name) + '</span><b>' + money(tot) + '</b></div>';
+  openDetail(c.name, 'траты за этот месяц', html);
+}
+
 /* ---------- запись ---------- */
 function addTx(t){
   t.id = 'local_' + Date.now() + '_' + Math.round(Math.random() * 999);
@@ -1183,6 +1203,7 @@ function save(){
 
 /* ---------- события ---------- */
 (function(){ var h = document.querySelector('.hero'); if (h) h.addEventListener('click', showAccountsDetail); })();
+(function(){ var tl = $('topsList'); if (tl) tl.addEventListener('click', function(e){ var row = e.target && e.target.closest ? e.target.closest('.trow') : null; var cid = row && row.getAttribute('data-cat'); if (cid) showCategoryDetail(cid); }); })();
 $('fab').addEventListener('click', openSheet);
 $('scrim').addEventListener('click', closeSheet);
 $('btnCancel').addEventListener('click', closeSheet);
